@@ -6,6 +6,6 @@
   "author": "Hinderling Volkart part of Dept",
   "license": "MIT",
   "dependencies": {
-    "@stageny/base": "1.0.0"
+    "@stageny/base": "^1.0.0"
   }
 }
