@@ -1,0 +1,60 @@
+Arguments:
+  /Users/sklaus/.nvm/versions/node/v10.16.3/bin/node /usr/local/Cellar/yarn/1.22.4/libexec/bin/yarn.js
+
+PATH:
+  /Users/sklaus/Documents/google-cloud-sdk/bin:/Users/sklaus/.nvm/versions/node/v10.16.3/bin:/Users/sklaus/.npm-packages/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/Library/Apple/usr/bin:/opt/ImageMagick/bin:/Users/sklaus/.yarn/bin:/Users/sklaus/.rvm/bin
+
+Yarn version:
+  1.22.4
+
+Node version:
+  10.16.3
+
+Platform:
+  darwin x64
+
+Trace:
+  Error: https://registry.npmjs.org/stageny%2f: Not found
+      at Request.params.callback [as _callback] (/usr/local/Cellar/yarn/1.22.4/libexec/lib/cli.js:66987:18)
+      at Request.self.callback (/usr/local/Cellar/yarn/1.22.4/libexec/lib/cli.js:140748:22)
+      at Request.emit (events.js:198:13)
+      at Request.<anonymous> (/usr/local/Cellar/yarn/1.22.4/libexec/lib/cli.js:141720:10)
+      at Request.emit (events.js:198:13)
+      at IncomingMessage.<anonymous> (/usr/local/Cellar/yarn/1.22.4/libexec/lib/cli.js:141642:12)
+      at Object.onceWrapper (events.js:286:20)
+      at IncomingMessage.emit (events.js:203:15)
+      at endReadableNT (_stream_readable.js:1145:12)
+      at process._tickCallback (internal/process/next_tick.js:63:19)
+
+npm manifest:
+  {
+    "name": "@stageny/base",
+    "version": "1.0.1",
+    "description": "Simplistic static site generator",
+    "main": "index.js",
+    "author": "Hinderling Volkart part of Dept",
+    "engines": {
+    "node": "12.x"
+  },
+  "license": "GPL-3.0-only",
+    "dependencies": {
+      "clone-deep": "^4.0.1",
+      "globby": "^11.0.1",
+      "gray-matter": "^4.0.2",
+      "inputformat-to-jstransformer": "^1.4.0",
+      "jstransformer": "^1.0.0",
+      "jstransformer-markdown-it": "^2.1.0",
+      "mkdirp": "^1.0.4",
+      "rimraf": "^3.0.2",
+  	"stageny/@util": "^1.0.0"
+    },
+    "scripts": {
+  	  "test": "node test/build.js"
+    }
+  }
+
+yarn manifest:
+  No manifest
+
+Lockfile:
+  No lockfile

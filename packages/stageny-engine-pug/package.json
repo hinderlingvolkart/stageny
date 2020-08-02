@@ -1,0 +1,18 @@
+{
+  "name": "@stageny/engine-pug",
+  "version": "1.0.4",
+  "description": "Pug engine for stageny, with global Component mixin",
+  "main": "index.js",
+  "author": "Hinderling Volkart part of Dept",
+  "engines": {
+    "node": "12.x"
+  },
+  "license": "GPL-3.0-only",
+  "dependencies": {
+    "pug": "^3.0.0"
+  },
+  "scripts": {
+	  "prepublish": "cd PugComponentMixin; node build.js",
+	  "test": "cd test; node index.js"
+  }
+}

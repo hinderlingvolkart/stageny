@@ -4,5 +4,24 @@
   "description": "Simplistic static site generator",
   "main": "index.js",
   "author": "Hinderling Volkart part of Dept",
-  "license": "MIT"
+  "engines": {
+    "node": "12.x"
+  },
+  "license": "GPL-3.0-only",
+  "dependencies": {
+    "@stageny/engine-js": "^1.0.0",
+    "@stageny/engine-pug": "^1.0.0",
+    "@stageny/util": "^1.0.0",
+    "clone-deep": "^4.0.1",
+    "globby": "^11.0.1",
+    "gray-matter": "^4.0.2",
+    "inputformat-to-jstransformer": "^1.4.0",
+    "jstransformer": "^1.0.0",
+    "jstransformer-markdown-it": "^2.1.0",
+    "mkdirp": "^1.0.4",
+    "rimraf": "^3.0.2"
+  },
+  "scripts": {
+    "test": "cd test; node build.js"
+  }
 }

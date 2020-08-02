@@ -2,8 +2,15 @@
   "name": "stageny",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT",
+  "engines": {
+    "node": "12.x"
+  },
+  "license": "GPL-3.0-only",
   "dependencies": {
     "lerna": "^3.22.1"
+  },
+  "prettier": {
+    "semi": false,
+    "useTabs": true
   }
 }

@@ -1,7 +1,7 @@
 {
-  "name": "@stageny/plugin-serve",
+  "name": "@stageny/plugin-i18n",
   "version": "1.0.1",
-  "description": "Serve pages via browser-sync",
+  "description": "i18n support for stageny",
   "main": "index.js",
   "author": "Hinderling Volkart part of Dept",
   "engines": {
@@ -9,6 +9,6 @@
   },
   "license": "GPL-3.0-only",
   "dependencies": {
-    "browser-sync": "^2.26.12"
+    "@stageny/util": "^1.0.1"
   }
 }
