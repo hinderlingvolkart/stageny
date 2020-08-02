@@ -13,4 +13,8 @@
     "semi": false,
     "useTabs": true
   }
+  , "scripts": {
+	  "version": "lerna version",
+	  "publish": "lerna publish from-package"
+  }
 }
