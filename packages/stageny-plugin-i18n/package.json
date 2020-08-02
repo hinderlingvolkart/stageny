@@ -1,6 +1,6 @@
 {
   "name": "@stageny/plugin-i18n",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "i18n support for stageny",
   "main": "index.js",
   "author": "Hinderling Volkart part of Dept",
