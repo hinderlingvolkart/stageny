@@ -9,6 +9,7 @@
   },
   "license": "GPL-3.0-only",
   "dependencies": {
-    "@stageny/util": "^1.0.3"
+    "@stageny/util": "^1.0.3",
+    "clone-deep": "^4.0.1"
   }
 }

@@ -1,4 +1,4 @@
-const { cloneDeep } = require("@stageny/util")
+const cloneDeep = require("clone-deep")
 var Path = require("path")
 
 /*
