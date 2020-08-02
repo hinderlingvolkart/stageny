@@ -1,6 +1,6 @@
 {
   "name": "@stageny/plugin-data",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Data for stageny",
   "main": "index.js",
   "author": "Hinderling Volkart part of Dept",

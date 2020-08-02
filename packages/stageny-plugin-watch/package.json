@@ -1,6 +1,6 @@
 {
   "name": "@stageny/plugin-watch",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Watch for changes then reload",
   "main": "index.js",
   "author": "Hinderling Volkart part of Dept",
@@ -9,7 +9,7 @@
   },
   "license": "GPL-3.0-only",
   "dependencies": {
-    "@stageny/util": "^1.0.1",
+    "@stageny/util": "^1.0.3",
     "chokidar": "^3.4.1"
   }
 }

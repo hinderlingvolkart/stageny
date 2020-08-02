@@ -1,6 +1,6 @@
 {
   "name": "@stageny/util",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "utilities for stageny",
   "main": "index.js",
   "author": "Hinderling Volkart part of Dept",
@@ -9,7 +9,7 @@
   },
   "license": "GPL-3.0-only",
   "dependencies": {
-    "ansi-colors": "^4.1.1",
-    "@fateharsh/debugging-timer": "^1.0.1"
+    "@fateharsh/debugging-timer": "^1.0.1",
+    "ansi-colors": "^4.1.1"
   }
 }
