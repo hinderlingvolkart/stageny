@@ -6,7 +6,7 @@ module.exports = {
 		return Pug.compile(
 			file.content,
 			Object.assign({}, options, {
-				plugins: [ComponentMixin()],
+				plugins: [ComponentMixin()].concat(options.plugins || []),
 				filename: file.sourcePath,
 				compileDebug: true,
 			})

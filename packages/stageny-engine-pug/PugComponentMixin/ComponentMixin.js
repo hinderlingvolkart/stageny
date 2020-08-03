@@ -2,7 +2,7 @@ module.exports = [
   {
     "type": "Mixin",
     "name": "Component",
-    "args": "key, config = { }",
+    "args": "key, options = { }",
     "block": {
       "type": "Block",
       "nodes": [
@@ -30,7 +30,7 @@ module.exports = [
               },
               {
                 "type": "Code",
-                "val": "config.content = pug_html.substr(beforeHtml.length)\npug_html = beforeHtml",
+                "val": "options.content = pug_html.substr(beforeHtml.length)\npug_html = beforeHtml",
                 "buffer": false,
                 "mustEscape": false,
                 "isInline": false,
@@ -49,14 +49,14 @@ module.exports = [
         },
         {
           "type": "Conditional",
-          "test": "component",
+          "test": "attributes",
           "consequent": {
             "type": "Block",
             "nodes": [
               {
                 "type": "Code",
-                "val": "component(key, config)",
-                "buffer": true,
+                "val": "options = Object.assign({ attributes }, attributes, options)",
+                "buffer": false,
                 "mustEscape": false,
                 "isInline": false,
                 "line": 9,
@@ -65,6 +65,31 @@ module.exports = [
               }
             ],
             "line": 9,
+            "filename": "ComponentMixin.pug"
+          },
+          "alternate": null,
+          "line": 8,
+          "column": 2,
+          "filename": "ComponentMixin.pug"
+        },
+        {
+          "type": "Conditional",
+          "test": "component",
+          "consequent": {
+            "type": "Block",
+            "nodes": [
+              {
+                "type": "Code",
+                "val": "component(key, options)",
+                "buffer": true,
+                "mustEscape": false,
+                "isInline": false,
+                "line": 12,
+                "column": 3,
+                "filename": "ComponentMixin.pug"
+              }
+            ],
+            "line": 12,
             "filename": "ComponentMixin.pug"
           },
           "alternate": {
@@ -76,15 +101,15 @@ module.exports = [
                 "buffer": false,
                 "mustEscape": false,
                 "isInline": false,
-                "line": 11,
+                "line": 14,
                 "column": 3,
                 "filename": "ComponentMixin.pug"
               }
             ],
-            "line": 11,
+            "line": 14,
             "filename": "ComponentMixin.pug"
           },
-          "line": 8,
+          "line": 11,
           "column": 2,
           "filename": "ComponentMixin.pug"
         }
@@ -116,13 +141,13 @@ module.exports = [
                 "buffer": false,
                 "mustEscape": false,
                 "isInline": false,
-                "line": 16,
+                "line": 19,
                 "column": 3,
                 "filename": "ComponentMixin.pug"
               },
               {
                 "type": "MixinBlock",
-                "line": 17,
+                "line": 20,
                 "column": 3,
                 "filename": "ComponentMixin.pug"
               },
@@ -132,25 +157,25 @@ module.exports = [
                 "buffer": false,
                 "mustEscape": false,
                 "isInline": false,
-                "line": 18,
+                "line": 21,
                 "column": 3,
                 "filename": "ComponentMixin.pug"
               }
             ],
-            "line": 16,
+            "line": 19,
             "filename": "ComponentMixin.pug"
           },
           "alternate": null,
-          "line": 15,
+          "line": 18,
           "column": 2,
           "filename": "ComponentMixin.pug"
         }
       ],
-      "line": 15,
+      "line": 18,
       "filename": "ComponentMixin.pug"
     },
     "call": false,
-    "line": 14,
+    "line": 17,
     "column": 1,
     "filename": "ComponentMixin.pug"
   }
