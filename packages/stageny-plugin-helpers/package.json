@@ -1,6 +1,6 @@
 {
   "name": "@stageny/plugin-helpers",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Helper functions for stageny",
   "main": "index.js",
   "author": "Hinderling Volkart part of Dept",
@@ -9,7 +9,7 @@
   },
   "license": "GPL-3.0-only",
   "dependencies": {
-    "@stageny/util": "^1.0.3",
+    "@stageny/util": "^1.0.4",
     "globby": "^11.0.1"
   }
 }

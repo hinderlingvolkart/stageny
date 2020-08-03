@@ -1,6 +1,6 @@
 {
   "name": "@stageny/engine-pug",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Pug engine for stageny, with global Component mixin",
   "main": "index.js",
   "author": "Hinderling Volkart part of Dept",
