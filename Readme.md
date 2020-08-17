@@ -22,6 +22,14 @@ npm run bootstrap
 
 [lerna bootstrap](https://github.com/lerna/lerna/tree/master/commands/bootstrap#readme) will install all dependencies in all packages, but will on top symlink all packasges between each other, greatly simlifying development.
 
+### Update Stageny
+
+Once you've improved anything, you first have to commit and push the change to the repository. Once you've done that, you call `npm run version`. Now you can patch the version of the changed packages.
+
+If you're all set, you can publish to NPM: `npm run publish`
+
+Please be extra cautious, because right now we've not set up a testing.
+
 
 ## Packages
 
