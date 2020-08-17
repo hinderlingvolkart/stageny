@@ -12,10 +12,10 @@
   "prettier": {
     "semi": false,
     "useTabs": true
-  }
-  , "scripts": {
-	  "bootstrap": "lerna bootstrap",
-	  "version": "lerna version",
-	  "publish": "lerna publish from-package"
+  },
+  "scripts": {
+    "bootstrap": "lerna bootstrap",
+    "version": "lerna version",
+    "publish": "lerna publish from-package"
   }
 }
