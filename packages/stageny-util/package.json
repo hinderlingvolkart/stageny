@@ -9,7 +9,6 @@
   },
   "license": "GPL-3.0-only",
   "dependencies": {
-    "@fateharsh/debugging-timer": "^1.0.1",
     "ansi-colors": "^4.1.1"
   }
 }
