@@ -1,6 +1,6 @@
 {
   "name": "@stageny/base",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Simplistic static site generator",
   "main": "index.js",
   "author": "Hinderling Volkart part of Dept",
@@ -11,7 +11,7 @@
   "dependencies": {
     "@stageny/engine-js": "^1.0.3",
     "@stageny/engine-pug": "^1.0.6",
-    "@stageny/util": "^1.0.5",
+    "@stageny/util": "^1.0.6",
     "clone-deep": "^4.0.1",
     "globby": "^11.0.1",
     "gray-matter": "^4.0.2",
