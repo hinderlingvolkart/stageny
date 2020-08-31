@@ -1,8 +1,19 @@
+---
+title: Layout
+desc: That is the layout
+data:
+  desc: Just layout
+  intro*: "`${desc} is great`"
+---
+
 
 doctype html
 html
 	head
-		title= title
+		title= _meta.title
 	body
+		p#intro= intro
+		p#desc= desc
+		p#meta-desc= _meta.desc
 		!= content
 

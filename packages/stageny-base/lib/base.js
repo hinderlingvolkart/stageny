@@ -231,11 +231,32 @@ function processLayout(name, data) {
 		throw new Error("Could not find layout " + name)
 	}
 	compileData(file)
-	const result = processFile(file, Object.assign({}, file.meta, data))
+
+	// we want _meta to be layout._meta + page._meta
+	// (page or super layout overrides layout)
+	const mergedData = Object.assign({}, data)
+	if (file.meta && file.meta.data)
+		Object.assign(mergedData, file.meta.data, mergedData._meta.data || {})
+	file.meta = Frontmatter.process(file.meta, mergedData)
+	if (!mergedData._meta.data) mergedData._meta.data = {}
+
+	assignIfNot(mergedData._meta, file.meta)
+	assignIfNot(mergedData._meta.data, file.meta.data || {})
+	Object.assign(mergedData, mergedData._meta.data)
+
+	const result = processFile(file, mergedData)
 	if (result === false) {
 		throw new Error(`Missing transformer for ${file.sourcePath}`)
 	}
 	return result
+}
+
+function assignIfNot(target, source) {
+	for (let key in source) {
+		if (!target.hasOwnProperty(key)) {
+			target[key] = source[key]
+		}
+	}
 }
 
 function processFile(file, data = {}) {
