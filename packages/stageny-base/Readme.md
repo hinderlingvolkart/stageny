@@ -96,12 +96,9 @@ module.exports = function(data) {
 
 
 
-### Data
+## Data
 
 Data can be global or on a page level.
-
-
-## Data
 
 Data will be applied in this order:
 
@@ -119,3 +116,22 @@ Data will be applied in this order:
 - result
 - render
 - rawMeta
+
+
+
+## Events / Plugins
+
+Plugins (and helpers) can sneak into any of those events:
+
+- init (before first run)
+- on every run:
+	- start
+	- sitemap (array of pages)
+	- for every page:
+		- beforepageprocess (file)
+		- beforepagedata (file, data)
+		- afterpagedata (file, data)
+		- beforepagerender (file)
+		- afterpagerender (file)
+		- afterpagewrite (file)
+	- end

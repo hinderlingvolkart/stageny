@@ -75,9 +75,6 @@ function plugin(options = { path: "data/*.*" }) {
 				config.data = datastore
 			})
 		},
-		beforepagedata(file, data) {
-			Object.assign(data, datastore, { _data: datastore })
-		},
 	}
 }
 

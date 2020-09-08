@@ -128,26 +128,18 @@ async function processPage(file) {
 	const mergedData = {}
 	Object.assign(
 		mergedData,
+		config.data,
 		{
 			_stageny: Stageny,
 			_page: file,
 			_pages: pages,
 			_captured: {},
+			_data: config.data,
 			_locals: mergedData,
 		},
 		{
 			component: function (name, options) {
-				const componentData = {}
-				Object.assign(
-					componentData,
-					mergedData,
-					{
-						_locals: componentData,
-						_args: options,
-					},
-					options
-				)
-				const html = processComponent(name, componentData)
+				const html = processComponent(name, options, mergedData)
 				return html
 			},
 			capture: function (key, content) {
@@ -208,17 +200,28 @@ async function processPage(file) {
 	delete file.result
 }
 
-function processComponent(name, data) {
+function processComponent(name, localData, globalData) {
 	const file = components.get(name)
 	if (!file) {
 		throw new Error("Could not find component " + name)
 	}
 	compileData(file)
-	const meta = Frontmatter.process(
+
+	const data = {}
+	Object.assign(
+		data,
+		globalData,
+		{
+			_locals: data,
+			_args: localData,
+		},
 		file.meta,
-		Object.assign({}, file.meta, data)
+		localData
 	)
-	const result = processFile(file, Object.assign({}, meta, data))
+
+	const meta = Frontmatter.process(file.meta, data)
+
+	const result = processFile(file, Object.assign({}, data, meta, localData))
 	if (result === false) {
 		throw new Error(`Missing transformer for ${file.sourcePath}`)
 	}
