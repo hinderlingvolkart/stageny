@@ -22,8 +22,8 @@ class StagenyConfig {
 
 function getFileName(file) {
 	return (
-		(file.rawMeta && file.rawMeta.name) ||
-		(file.meta && file.meta.name) ||
+		(file.rawMeta && file.rawMeta.$name) ||
+		(file.meta && file.meta.$name) ||
 		Path.basename(file.url)
 			.replace(/\.\w+$/, "")
 			.replace(/^_/, "")
