@@ -25,7 +25,7 @@ module.exports = function (
 				if (languages instanceof Array) {
 					languages.forEach((lang) => {
 						const newPage = cloneDeep(page)
-						newPage.url = Path.join(lang, page.url)
+						newPage.url = Path.join("/", lang, page.url)
 						newPage.meta.data.locale = lang
 						pages.push(newPage)
 					})
