@@ -13,32 +13,48 @@ class MeasureTime {
 	 * @param {string} what - Label, e.g. "loading file".
 	 */
 	start(what) {
-		this.data[what] = {
+		return {
+			name: what,
 			start: Date.now(),
 		}
 	}
 
 	/**
 	 * End the timer.
-	 * @param {string} what - Label, e.g. "loading file".
+	 * @param {object} what - Label, e.g. "loading file".
 	 */
-	end(what) {
+	end(measurement) {
+		const what = measurement.name
 		if (!this.data[what]) {
-			this.start(what)
+			this.data[what] = {
+				name: what,
+				total: 0,
+				count: 0,
+			}
 		}
-		this.data[what].end = Date.now()
-		this.data[what].total = this.data[what].end - this.data[what].start
+		const item = this.data[what]
+		measurement.end = Date.now()
+		item.total += measurement.end - measurement.start
+		item.count++
 	}
 
 	/**
 	 * Print the results to the console.
 	 * @returns {str} - The formatted result, same as those printed to console.
 	 */
-	print() {
-		let str = ""
-		for (let key of Object.keys(this.data)) {
-			str += `${key}: ${this.data[key].total} ms \r\n`
+	print(sorted = false) {
+		const items = Object.values(this.data)
+		if (sorted) {
+			items.sort((a, b) => b.total - a.total)
 		}
+		let str = items
+			.map(
+				(item) =>
+					`${item.name}: ${item.total} ms ${
+						item.count > 1 ? " | " + item.count + " times" : ""
+					}`
+			)
+			.join("\r\n")
 
 		console.log(str)
 		return str

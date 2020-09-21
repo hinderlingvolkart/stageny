@@ -18,6 +18,7 @@ const templateEngines = [PugEngine, JavascriptEngine]
 let savedPages = {}
 let isPaused = false
 let initialised = false
+let perf
 
 const Stageny = {
 	config(process = null) {
@@ -49,7 +50,9 @@ const Stageny = {
 	},
 	isSupportedFile,
 	async run(options) {
-		const perf = new Perf()
+		const overallPerf = new Perf()
+		perf = new Perf()
+		let perfMeasure
 
 		if (isPaused) return
 		await this.init()
@@ -57,24 +60,28 @@ const Stageny = {
 		isPaused = true
 		applyPlugins("start")
 
-		perf.start("Reading sitemap")
+		perfMeasure = overallPerf.start("Reading sitemap")
 		await read()
-		perf.end("Reading sitemap")
+		overallPerf.end(perfMeasure)
 
-		perf.start("Sitemap plugins")
+		perfMeasure = overallPerf.start("Sitemap plugins")
 		applyPlugins("sitemap", pages)
 		// sort pages by url, this a) is nice and b) eases iterations
 		// at this point no modification to sitemap should happen anymore
 		pages.sort((a, b) => (a.url == b.url ? 0 : +(a.url > b.url) || -1))
-		perf.end("Sitemap plugins")
+		overallPerf.end(perfMeasure)
 
-		perf.start("Rendering")
+		perfMeasure = overallPerf.start("Rendering")
 		await process(options)
-		perf.end("Rendering")
+		overallPerf.end(perfMeasure)
 
 		applyPlugins("end")
 
-		perf.print()
+		overallPerf.print()
+		if (config.verbose) {
+			perf.print(true)
+		}
+		overallPerf.clean()
 		perf.clean()
 
 		isPaused = false
@@ -205,6 +212,7 @@ function processComponent(name, localData, globalData) {
 	if (!file) {
 		throw new Error("Could not find component " + name)
 	}
+	const perfItem = perf.start(`Component ${name}`)
 	compileData(file)
 
 	const data = {}
@@ -225,6 +233,7 @@ function processComponent(name, localData, globalData) {
 	if (result === false) {
 		throw new Error(`Missing transformer for ${file.sourcePath}`)
 	}
+	perf.end(perfItem)
 	return result
 }
 
@@ -281,12 +290,14 @@ function processFile(file, data = {}) {
 
 function compileTemplate(file) {
 	if (!file.render) {
+		const perfItem = perf.start("Compile")
 		const engine = getEngineForFile(file)
 		if (typeof file.extension === "undefined")
 			file.extension = getExtension(file.sourcePath)
 		const engineOptions = config.engineOptions[file.extension]
 		if (!engine) return false
 		file.render = engine.compile(file, engineOptions)
+		perf.end(perfItem)
 	}
 }
 function compileData(file) {
