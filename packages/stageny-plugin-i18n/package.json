@@ -1,6 +1,6 @@
 {
   "name": "@stageny/plugin-i18n",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "i18n support for stageny",
   "main": "index.js",
   "author": "Hinderling Volkart part of Dept",
@@ -9,7 +9,7 @@
   },
   "license": "GPL-3.0-only",
   "dependencies": {
-    "@stageny/util": "^1.0.6",
+    "@stageny/util": "^1.0.7",
     "clone-deep": "^4.0.1"
   }
 }
