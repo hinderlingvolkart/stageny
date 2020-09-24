@@ -13,14 +13,24 @@ function start(Stageny, options = {}) {
 		},
 		// that is where we'll insert middleware from options
 		(req, res, next) => {
-			const reqPath = req.url.endsWith("/")
-				? `${req.url}index.html`
-				: req.url
-			const page = Stageny.sitemap.find((page) => page.url === reqPath)
+			const matchExtension = req.url.match(/\w+\.(\w+)$/)
+			const potentialPaths = []
+			if (matchExtension) {
+				potentialPaths.push(req.url)
+			} else {
+				if (req.url.endsWith("/")) {
+					potentialPaths.push(`${req.url}index.html`)
+				} else {
+					potentialPaths.push(`${req.url}.html`)
+					potentialPaths.push(`${req.url}/index.html`)
+				}
+			}
+			const pageFilter = (page) => potentialPaths.includes(page.url)
+			const page = Stageny.sitemap.find(pageFilter)
 			if (page) {
 				Stageny.resume()
 				Stageny.run({
-					filter: (page) => page.url === reqPath,
+					filter: pageFilter,
 				}).then(() => {
 					next()
 				})
@@ -41,7 +51,12 @@ function start(Stageny, options = {}) {
 
 	const bsOptions = Object.assign(
 		{
-			server: dist,
+			server: {
+				baseDir: dist,
+				serveStaticOptions: {
+					extensions: ["html"],
+				},
+			},
 			files: [dist, "!**/*.html"],
 			open: true,
 			port: parseInt(process.env.PORT, 10) || 3000,
