@@ -33,7 +33,11 @@ function start(Stageny, options = {}) {
 			bs.resume()
 			next()
 		},
-	]
+	].map((handle) => ({
+		route: "",
+		override: true, // this will put our middleware to the beginning, before serve-static
+		handle,
+	}))
 
 	if (options.middleware) {
 		middleware.splice.apply(middleware, [1, 0].concat(options.middleware))
