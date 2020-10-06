@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "engines": {
-    "node": "12.x"
+    "node": "^12 || ^14"
   },
   "license": "GPL-3.0-only",
   "dependencies": {
