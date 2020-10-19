@@ -45,7 +45,7 @@ function start(Stageny, options = {}) {
 		},
 	].map((handle) => ({
 		route: "",
-		override: true, // this will put our middleware to the beginning, before serve-static
+		// override: true, // this will put our middleware to the beginning, before serve-static
 		handle,
 	}))
 
