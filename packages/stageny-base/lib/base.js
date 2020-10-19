@@ -19,6 +19,7 @@ let savedPages = {}
 let isPaused = false
 let initialised = false
 let perf
+let currentRun
 
 const Stageny = {
 	config(process = null) {
@@ -33,9 +34,7 @@ const Stageny = {
 		}
 		return config
 	},
-	init() {
-		if (!initialised) applyPlugins("init")
-	},
+	init,
 	get components() {
 		return components
 	},
@@ -49,42 +48,22 @@ const Stageny = {
 		templateEngines.push(engine)
 	},
 	isSupportedFile,
-	async run(options) {
-		const overallPerf = new Perf()
-		perf = new Perf()
-		let perfMeasure
-
-		if (isPaused) return
-		await this.init()
-
-		isPaused = true
-		applyPlugins("start")
-
-		perfMeasure = overallPerf.start("Reading sitemap")
-		await read()
-		overallPerf.end(perfMeasure)
-
-		perfMeasure = overallPerf.start("Sitemap plugins")
-		applyPlugins("sitemap", pages)
-		// sort pages by url, this a) is nice and b) eases iterations
-		// at this point no modification to sitemap should happen anymore
-		pages.sort((a, b) => (a.url == b.url ? 0 : +(a.url > b.url) || -1))
-		overallPerf.end(perfMeasure)
-
-		perfMeasure = overallPerf.start("Rendering")
-		await process(options)
-		overallPerf.end(perfMeasure)
-
-		applyPlugins("end")
-
-		overallPerf.print()
-		if (config.verbose) {
-			perf.print(true)
+	run(options) {
+		if (currentRun) {
+			if (config.verbose)
+				console.log("Waiting for current run to finish ...")
+			return new Promise((resolve, reject) => {
+				currentRun.finally(() => run(options).then(resolve, reject))
+			})
+		} else {
+			if (config.verbose) console.log("Starting new run")
+			currentRun = run(options)
+			currentRun.finally(() => {
+				if (config.verbose) console.log("Cleaned run.")
+				currentRun = null
+			})
+			return currentRun
 		}
-		overallPerf.clean()
-		perf.clean()
-
-		isPaused = false
 	},
 	pause() {
 		isPaused = true
@@ -92,6 +71,48 @@ const Stageny = {
 	resume() {
 		isPaused = false
 	},
+}
+
+function init() {
+	if (!initialised) applyPlugins("init")
+}
+
+async function run(options) {
+	const overallPerf = new Perf()
+	perf = new Perf()
+	let perfMeasure
+
+	if (isPaused) return
+	await init()
+
+	isPaused = true
+	applyPlugins("start")
+
+	perfMeasure = overallPerf.start("Reading sitemap")
+	await read()
+	overallPerf.end(perfMeasure)
+
+	perfMeasure = overallPerf.start("Sitemap plugins")
+	applyPlugins("sitemap", pages)
+	// sort pages by url, this a) is nice and b) eases iterations
+	// at this point no modification to sitemap should happen anymore
+	pages.sort((a, b) => (a.url == b.url ? 0 : +(a.url > b.url) || -1))
+	overallPerf.end(perfMeasure)
+
+	perfMeasure = overallPerf.start("Rendering")
+	await process(options)
+	overallPerf.end(perfMeasure)
+
+	applyPlugins("end")
+
+	overallPerf.print()
+	if (config.verbose) {
+		perf.print(true)
+	}
+	overallPerf.clean()
+	perf.clean()
+
+	isPaused = false
 }
 
 function read() {
