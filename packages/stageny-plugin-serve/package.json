@@ -1,6 +1,6 @@
 {
   "name": "@stageny/plugin-serve",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Serve pages via browser-sync",
   "main": "index.js",
   "author": "Hinderling Volkart part of Dept",
