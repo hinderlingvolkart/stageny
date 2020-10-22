@@ -217,13 +217,13 @@ async function processPage(file) {
 
 	// let's give plugins a chance to post process the result
 	file.result = result
+	file.destination = Path.join(config.dist, file.url)
 	applyPlugins("beforepagewrite", file)
 	result = file.result
 
-	const destination = Path.join(config.dist, file.url)
-	mkdirp.sync(Path.dirname(destination))
-	await FS.writeFile(destination, result)
-	savedPages[file.url] = destination
+	mkdirp.sync(Path.dirname(file.destination))
+	await FS.writeFile(file.destination, result)
+	savedPages[file.url] = file.destination
 	applyPlugins("afterpagewrite", file)
 	delete file.result
 }

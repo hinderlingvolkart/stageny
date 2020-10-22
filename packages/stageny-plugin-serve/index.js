@@ -32,7 +32,13 @@ function start(Stageny, options = {}) {
 				Stageny.run({
 					filter: pageFilter,
 				}).then(() => {
-					next()
+					try {
+						const send = require("send")
+						const page = Stageny.sitemap.find(pageFilter)
+						send(req, page.destination).pipe(res)
+					} catch (e) {
+						next()
+					}
 				})
 			} else {
 				next()
