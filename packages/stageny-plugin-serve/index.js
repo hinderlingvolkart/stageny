@@ -13,16 +13,17 @@ function start(Stageny, options = {}) {
 		},
 		// that is where we'll insert middleware from options
 		(req, res, next) => {
-			const matchExtension = req.url.match(/\w+\.(\w+)$/)
+			const unicodeUrl = decodeURIComponent(req.url)
+			const matchExtension = unicodeUrl.match(/\w+\.(\w+)$/)
 			const potentialPaths = []
 			if (matchExtension) {
-				potentialPaths.push(req.url)
+				potentialPaths.push(unicodeUrl)
 			} else {
-				if (req.url.endsWith("/")) {
-					potentialPaths.push(`${req.url}index.html`)
+				if (unicodeUrl.endsWith("/")) {
+					potentialPaths.push(`${unicodeUrl}index.html`)
 				} else {
-					potentialPaths.push(`${req.url}.html`)
-					potentialPaths.push(`${req.url}/index.html`)
+					potentialPaths.push(`${unicodeUrl}.html`)
+					potentialPaths.push(`${unicodeUrl}/index.html`)
 				}
 			}
 			const pageFilter = (page) => potentialPaths.includes(page.url)
