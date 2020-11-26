@@ -10,8 +10,8 @@ function compileData(data) {
 		if (key.endsWith("*")) {
 			try {
 				return {
-					key: key.substr(0, key.length - 1),
-					value: new Function(
+					$key: key.substr(0, key.length - 1),
+					$value: new Function(
 						"__data__",
 						`with (__data__) { return ${val} }`
 					),

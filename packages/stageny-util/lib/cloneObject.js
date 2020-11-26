@@ -23,11 +23,11 @@ function deepClone(obj, valueTransformer = null, hash = new WeakMap()) {
 				valueTransformer &&
 				val &&
 				typeof val === "object" &&
-				val.key &&
-				val.value
+				val.$key &&
+				val.$value
 			) {
-				key = val.key
-				val = val.value
+				key = val.$key
+				val = val.$value
 			}
 
 			return { [key]: deepClone(val, valueTransformer, hash) }
