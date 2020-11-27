@@ -196,6 +196,7 @@ async function processPage(file) {
 		result = processFile(file, mergedData)
 		applyPlugins("afterpagerender", file)
 	} catch (error) {
+		applyPlugins("pageerror", file)
 		console.error(
 			"🚨 Problem processing",
 			"\n  🎬",

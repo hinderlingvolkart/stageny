@@ -134,4 +134,5 @@ Plugins (and helpers) can sneak into any of those events:
 		- beforepagerender (file)
 		- afterpagerender (file)
 		- afterpagewrite (file)
+		- pageerror (file)
 	- end
