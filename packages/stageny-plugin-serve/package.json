@@ -9,6 +9,6 @@
   },
   "license": "GPL-3.0-only",
   "dependencies": {
-    "browser-sync": "^2.26.12"
+    "browser-sync": "^2.26.13"
   }
 }
