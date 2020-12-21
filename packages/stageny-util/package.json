@@ -1,6 +1,6 @@
 {
   "name": "@stageny/util",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "utilities for stageny",
   "main": "index.js",
   "author": "Hinderling Volkart part of Dept",

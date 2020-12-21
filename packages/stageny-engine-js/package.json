@@ -1,6 +1,6 @@
 {
   "name": "@stageny/engine-js",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Javascript Engine for stageny",
   "main": "index.js",
   "author": "Hinderling Volkart part of Dept",
