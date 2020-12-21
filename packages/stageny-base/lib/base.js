@@ -134,6 +134,8 @@ async function process(options = {}) {
 		pagesToProcess = pagesToProcess.filter(options.filter)
 	}
 
+	console.log(`Rendering ${pagesToProcess} out of ${pages.length} pages:`)
+
 	for (let i = 0; i < pagesToProcess.length; i++) {
 		const page = pagesToProcess[i]
 		await processPage(page)
