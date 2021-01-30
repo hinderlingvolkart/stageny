@@ -1,4 +1,4 @@
-var fs = require("fs")
+var fs = require("fs").promises
 var path = require("path")
 var globby = require("globby")
 
@@ -10,18 +10,18 @@ let stagenyConfig = {}
 function reset() {
 	datastore = {}
 }
-function readAll(value) {
+async function readAll(value) {
 	if (stagenyConfig.verbose) console.log("Reading data")
 	var files = globby.sync(value)
-	files.forEach(function (file) {
-		readFile(file)
-	})
+	await Promise.all(files.map(async function (file) {
+		await readFile(file)
+	}))
 }
 
-function readFile(value) {
+async function readFile(value) {
 	try {
 		var key = pathToKey(value)
-		datastore[key] = parse(path.extname(value), value)
+		datastore[key] = await parse(path.extname(value), value)
 		if (stagenyConfig.verbose) console.log(`- added data "${key}"`)
 	} catch (error) {
 		console.error(`🛑  Could not read data from "${value}"`)
@@ -38,17 +38,17 @@ function pathToKey(value) {
 	return path.basename(value).split(".")[0]
 }
 
-function parse(ext, value) {
+async function parse(ext, value) {
 	if (ext == ".yaml" || ext == ".yml") {
-		var content = fs.readFileSync(value)
+		var content = await fs.readFile(value)
 		return parseYaml(content)
 	}
 	if (ext == ".json") {
-		var content = fs.readFileSync(value)
+		var content = await fs.readFile(value)
 		return parseJson(content)
 	}
 	if (ext == ".js") {
-		return parseJS(value)
+		return await parseJS(value)
 	}
 }
 function parseYaml(content) {
@@ -60,15 +60,20 @@ function parseJson(content) {
 }
 function parseJS(value) {
 	delete require.cache[require.resolve(value)]
-	return require(value)
+	const js = require(value)
+	if (typeof js === 'function') {
+		return await js()
+	} else {
+		return js
+	}
 }
 
 function plugin(options = { path: "data/*.*" }) {
 	return {
-		start() {
-			this.config((config) => {
+		async start() {
+			await this.config(async (config) => {
 				stagenyConfig = config
-				readAll(options.path)
+				await readAll(options.path)
 				// we could only update (add/replace/delete)
 				// entries from datastore, instead of replacing
 				// the entire data object
