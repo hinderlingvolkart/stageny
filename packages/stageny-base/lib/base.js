@@ -23,8 +23,7 @@ let currentRun
 
 const Stageny = {
 	config(process = null) {
-		if (process) {
-			const result = process(config)
+		const handleResult = (result) => {
 			if (result) {
 				Object.assign(config, result)
 			}
@@ -32,7 +31,20 @@ const Stageny = {
 			config.components = normalizeInputs(config.components)
 			config.layouts = normalizeInputs(config.layouts)
 		}
-		return config
+		if (process) {
+			const result = process(config)
+			if (result instanceof Promise) {
+				return new Promise((resolve) => {
+					result.then((result) => {
+						handleResult(result)
+						resolve(config)
+					})
+				})
+			} else {
+				handleResult(result)
+				return config
+			}
+		}
 	},
 	init,
 	get components() {
@@ -73,8 +85,8 @@ const Stageny = {
 	},
 }
 
-function init() {
-	if (!initialised) applyPlugins("init")
+async function init() {
+	if (!initialised) await applyPlugins("init")
 }
 
 async function run(options) {
@@ -86,14 +98,14 @@ async function run(options) {
 	await init()
 
 	isPaused = true
-	applyPlugins("start")
+	await applyPlugins("start")
 
 	perfMeasure = overallPerf.start("Reading sitemap")
 	await read()
 	overallPerf.end(perfMeasure)
 
 	perfMeasure = overallPerf.start("Sitemap plugins")
-	applyPlugins("sitemap", pages)
+	await applyPlugins("sitemap", pages)
 	// sort pages by url, this a) is nice and b) eases iterations
 	// at this point no modification to sitemap should happen anymore
 	pages.sort((a, b) => (a.url == b.url ? 0 : +(a.url > b.url) || -1))
@@ -103,7 +115,7 @@ async function run(options) {
 	await process(options)
 	overallPerf.end(perfMeasure)
 
-	applyPlugins("end")
+	await applyPlugins("end")
 
 	overallPerf.print()
 	if (config.verbose) {
@@ -155,7 +167,7 @@ async function unlink(path) {
 async function processPage(file) {
 	console.log("📃 Rendering page", file.url)
 
-	applyPlugins("beforepageprocess", file)
+	await applyPlugins("beforepageprocess", file)
 
 	const mergedData = {}
 	Object.assign(
@@ -187,20 +199,20 @@ async function processPage(file) {
 	try {
 		compileTemplate(file)
 
-		applyPlugins("beforepagedata", file, mergedData)
+		await applyPlugins("beforepagedata", file, mergedData)
 		Object.assign(mergedData, config.data, { _data: config.data })
 		if (file.meta && file.meta.data)
 			Object.assign(mergedData, file.meta.data)
 		file.meta = Frontmatter.process(file.meta, mergedData)
 		Object.assign(mergedData, { _meta: file.meta })
 		Object.assign(mergedData, file.meta.data)
-		applyPlugins("afterpagedata", file, mergedData)
+		await applyPlugins("afterpagedata", file, mergedData)
 
-		applyPlugins("beforepagerender", file)
+		await applyPlugins("beforepagerender", file)
 		result = processFile(file, mergedData)
-		applyPlugins("afterpagerender", file)
+		await applyPlugins("afterpagerender", file)
 	} catch (error) {
-		applyPlugins("pageerror", file)
+		await applyPlugins("pageerror", file)
 		console.error(
 			"🚨 Problem processing",
 			"\n  🎬",
@@ -223,13 +235,13 @@ async function processPage(file) {
 	// let's give plugins a chance to post process the result
 	file.result = result
 	file.destination = Path.join(config.dist, file.url)
-	applyPlugins("beforepagewrite", file)
+	await applyPlugins("beforepagewrite", file)
 	result = file.result
 
 	mkdirp.sync(Path.dirname(file.destination))
 	await FS.writeFile(file.destination, result)
 	savedPages[file.url] = file.destination
-	applyPlugins("afterpagewrite", file)
+	await applyPlugins("afterpagewrite", file)
 	delete file.result
 }
 
@@ -434,7 +446,7 @@ async function readFile(path, { base, dest, data: defaultData }) {
 	}
 	const engine = getEngineForFile(file)
 	if (engine && engine.read) {
-		let { data, content } = engine.read(file.sourcePath)
+		let { data, content } = await engine.read(file.sourcePath)
 		Object.assign(file, {
 			content,
 			meta: Object.assign({}, defaultData, data),
@@ -515,15 +527,17 @@ function getExtension(path) {
 	return ""
 }
 
-function applyPlugins(key, ...rest) {
-	config.plugins.forEach((plugin) => {
-		if (plugin[key]) {
-			plugin[key].apply(Stageny, rest)
-		}
-		if (plugin.all) {
-			plugin.all.apply(Stageny, [key].concat(rest))
-		}
-	})
+async function applyPlugins(key, ...rest) {
+	await Promise.all(
+		config.plugins.map(async (plugin) => {
+			if (plugin[key]) {
+				await plugin[key].apply(Stageny, rest)
+			}
+			if (plugin.all) {
+				await plugin.all.apply(Stageny, [key].concat(rest))
+			}
+		})
+	)
 }
 
 module.exports = Stageny
