@@ -1,3 +1,4 @@
+![Stageny Logo](extra/logo.svg)
 # Stageny
 
 Simple static site generator
@@ -75,7 +76,7 @@ source
 	  project2.html.md
 ```
 
-A more advanced setup will make use of plugins for data and helpers (and locales and pagination):
+A slightly more advanced setup will make use of plugins for data and helpers (and locales and pagination):
 
 ```
 source
