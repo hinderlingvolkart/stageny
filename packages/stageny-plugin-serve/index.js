@@ -22,6 +22,7 @@ function start(Stageny, options = {}) {
 				if (unicodeUrl.endsWith("/")) {
 					potentialPaths.push(`${unicodeUrl}index.html`)
 				} else {
+					potentialPaths.push(unicodeUrl)
 					potentialPaths.push(`${unicodeUrl}.html`)
 					potentialPaths.push(`${unicodeUrl}/index.html`)
 				}
