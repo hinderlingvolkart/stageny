@@ -2,6 +2,7 @@ let bs
 
 function start(Stageny, options = {}) {
 	const browsersync = require("browser-sync")
+	const parseUrl = require("url-parse")
 	const config = Stageny.config()
 	const dist = config.dist
 
@@ -14,17 +15,18 @@ function start(Stageny, options = {}) {
 		// that is where we'll insert middleware from options
 		(req, res, next) => {
 			const unicodeUrl = decodeURIComponent(req.url)
-			const matchExtension = unicodeUrl.match(/\w+\.(\w+)$/)
+			const parsedUrl = parseUrl(unicodeUrl).pathname
+			const matchExtension = parsedUrl.match(/\w+\.(\w+)$/)
 			const potentialPaths = []
 			if (matchExtension) {
-				potentialPaths.push(unicodeUrl)
+				potentialPaths.push(parsedUrl)
 			} else {
-				if (unicodeUrl.endsWith("/")) {
-					potentialPaths.push(`${unicodeUrl}index.html`)
+				if (parsedUrl.endsWith("/")) {
+					potentialPaths.push(`${parsedUrl}index.html`)
 				} else {
-					potentialPaths.push(unicodeUrl)
-					potentialPaths.push(`${unicodeUrl}.html`)
-					potentialPaths.push(`${unicodeUrl}/index.html`)
+					potentialPaths.push(parsedUrl)
+					potentialPaths.push(`${parsedUrl}.html`)
+					potentialPaths.push(`${parsedUrl}/index.html`)
 				}
 			}
 			const pageFilter = (page) => potentialPaths.includes(page.url)
