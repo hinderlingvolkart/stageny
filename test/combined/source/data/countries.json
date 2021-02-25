@@ -1,0 +1,14 @@
+[
+	{
+		"language": "en-US",
+		"name": "United States"
+	},
+	{
+		"language": "en-GB",
+		"name": "United Kingdom"
+	},
+	{
+		"language": "de-DE",
+		"name": "Germany"
+	}
+]

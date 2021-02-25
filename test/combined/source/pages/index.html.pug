@@ -1,0 +1,12 @@
+---
+layout: base
+title: Overview
+localize: false
+---
+
+ul
+	each page in _pages
+		li
+			a(href=urlFor(page.url)) #{page.url}
+			|
+			| #{page.meta.title}

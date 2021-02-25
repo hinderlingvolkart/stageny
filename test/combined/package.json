@@ -1,0 +1,22 @@
+{
+  "name": "stageny-test-combined",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "serve": "node tasks/serve.js",
+    "build": "node tasks/build.js",
+    "watch": "node tasks/watch.js"
+  },
+  "dependencies": {
+    "@stageny/base": "^1.0.16",
+    "@stageny/plugin-data": "^1.0.6",
+    "@stageny/plugin-helpers": "^1.0.9",
+    "@stageny/plugin-i18n": "^1.0.11",
+    "@stageny/plugin-pagination": "^0.0.9",
+    "@stageny/plugin-serve": "^1.0.10",
+    "@stageny/plugin-watch": "^1.0.9",
+    "rimraf": "^3.0.2"
+  }
+}

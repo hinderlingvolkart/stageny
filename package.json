@@ -19,5 +19,5 @@
     "publish": "lerna publish from-package"
   },
   "private": true,
-  "workspaces": ["packages/*"]
+  "workspaces": ["packages/*", "test/*"]
 }
