@@ -17,5 +17,7 @@
     "bootstrap": "lerna bootstrap",
     "version": "lerna version",
     "publish": "lerna publish from-package"
-  }
+  },
+  "private": true,
+  "workspaces": ["packages/*"]
 }
