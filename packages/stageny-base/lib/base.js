@@ -49,10 +49,10 @@ const Stageny = {
 	},
 	isSupportedFile,
 	run(options) {
-		runNext(options, run)
+		return runNext(options, run)
 	},
 	render(options) {
-		runNext(options, render)
+		return runNext(options, render)
 	},
 	pause() {
 		isPaused = true
