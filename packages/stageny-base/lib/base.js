@@ -49,21 +49,10 @@ const Stageny = {
 	},
 	isSupportedFile,
 	run(options) {
-		if (currentRun) {
-			if (config.verbose)
-				console.log("Waiting for current run to finish ...")
-			return new Promise((resolve, reject) => {
-				currentRun.finally(() => run(options).then(resolve, reject))
-			})
-		} else {
-			if (config.verbose) console.log("Starting new run")
-			currentRun = run(options)
-			currentRun.finally(() => {
-				if (config.verbose) console.log("Cleaned run.")
-				currentRun = null
-			})
-			return currentRun
-		}
+		runNext(options, run)
+	},
+	render(options) {
+		runNext(options, render)
 	},
 	pause() {
 		isPaused = true
@@ -73,8 +62,29 @@ const Stageny = {
 	},
 }
 
+function runNext(options, runMethod = run) {
+	if (currentRun) {
+		if (config.verbose) console.log("Waiting for current run to finish ...")
+		return new Promise((resolve, reject) => {
+			currentRun.finally(() => runMethod(options).then(resolve, reject))
+		})
+	} else {
+		if (config.verbose) console.log("Starting new run")
+		currentRun = runMethod(options)
+		currentRun.finally(() => {
+			if (config.verbose) console.log("Cleaned run.")
+			currentRun = null
+		})
+		return currentRun
+	}
+}
+
 function init() {
-	if (!initialised) applyPlugins("init")
+	if (!initialised) {
+		applyPlugins("init")
+		return true
+	}
+	return false
 }
 
 async function run(options) {
@@ -111,6 +121,27 @@ async function run(options) {
 	}
 	overallPerf.clean()
 	perf.clean()
+
+	isPaused = false
+}
+
+async function render(options) {
+	const overallPerf = new Perf()
+	let perfMeasure
+
+	if (isPaused) return
+	if (await init()) {
+		return process(options)
+	}
+
+	isPaused = true
+
+	perfMeasure = overallPerf.start("Rendering")
+	await process(options)
+	overallPerf.end(perfMeasure)
+
+	overallPerf.print()
+	overallPerf.clean()
 
 	isPaused = false
 }

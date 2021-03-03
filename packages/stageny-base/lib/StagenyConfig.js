@@ -17,6 +17,7 @@ class StagenyConfig {
 		this.plugins = []
 		this.dist = "dist"
 		this.verbose = false
+		this.alwaysRebuildSitemap = true
 	}
 }
 

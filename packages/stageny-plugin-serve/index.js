@@ -33,7 +33,8 @@ function start(Stageny, options = {}) {
 			const page = Stageny.sitemap.find(pageFilter)
 			if (page) {
 				Stageny.resume()
-				Stageny.run({
+				const runMethod = config.alwaysRebuildSitemap ? "run" : "render"
+				Stageny[runMethod]({
 					filter: pageFilter,
 				}).then(() => {
 					try {
