@@ -1,6 +1,6 @@
 {
   "name": "stageny-test-combined",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "index.js",
   "license": "MIT",
   "private": true,
@@ -10,7 +10,7 @@
     "watch": "node tasks/watch.js"
   },
   "dependencies": {
-    "@stageny/base": "^1.0.18",
+    "@stageny/base": "^1.0.19",
     "@stageny/plugin-data": "^1.0.6",
     "@stageny/plugin-helpers": "^1.0.9",
     "@stageny/plugin-i18n": "^1.0.11",
