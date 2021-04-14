@@ -7,7 +7,7 @@
   },
   "license": "GPL-3.0-only",
   "dependencies": {
-    "lerna": "^3.22.1"
+    "lerna": "^4.0.0"
   },
   "prettier": {
     "semi": false,
@@ -19,5 +19,8 @@
     "publish": "lerna publish from-package"
   },
   "private": true,
-  "workspaces": ["packages/*", "test/*"]
+  "workspaces": [
+    "packages/*",
+    "test/*"
+  ]
 }
