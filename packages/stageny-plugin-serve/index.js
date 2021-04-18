@@ -41,6 +41,7 @@ function start(Stageny, options = {}) {
 						const send = require("send")
 						const page = Stageny.sitemap.find(pageFilter)
 						send(req, page.destination).pipe(res)
+						bs.resume()
 					} catch (e) {
 						next()
 					}
