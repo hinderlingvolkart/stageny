@@ -406,8 +406,7 @@ async function readLayouts() {
 
 async function readPages() {
 	pages.length = 0
-	const pathTest = /\.\w+\.\w+$/ // we want two extensions
-	const files = await readFiles(config.pages, (path) => pathTest.test(path))
+	const files = await readFiles(config.pages)
 	files.forEach((file) => {
 		// let's make sure there's initally always a meta.data object
 		if (file.meta && !file.meta.data) {
@@ -517,21 +516,21 @@ function getEngineForFile(file) {
 	if (!handler) {
 		handler = findJstransformer(extension)
 		if (handler) {
-			handler = jstransformer(handler)
-		}
-		if (handler.compile) {
-			handler = {
-				compile(file) {
-					return handler.compile(file.content).fn
-				},
-			}
-		} else if (handler.render) {
-			handler = {
-				compile: function (file) {
-					return function (data) {
-						return handler.render(file.content, data).body
-					}
-				},
+			const transformer = jstransformer(handler)
+			if (transformer.compile) {
+				handler = {
+					compile(file) {
+						return transformer.compile(file.content).fn
+					},
+				}
+			} else if (transformer.render) {
+				handler = {
+					compile: function (file) {
+						return function (data) {
+							return transformer.render(file.content, data).body
+						}
+					},
+				}
 			}
 		}
 	}
