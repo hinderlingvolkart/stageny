@@ -14,7 +14,7 @@
     "@stageny/util": "^1.0.10",
     "clone-deep": "^4.0.1",
     "globby": "^11.0.1",
-    "gray-matter": "^4.0.2",
+    "gray-matter": "^4.0.3",
     "inputformat-to-jstransformer": "^1.4.0",
     "jstransformer": "^1.0.0",
     "jstransformer-markdown-it": "^2.1.0",
