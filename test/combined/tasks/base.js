@@ -1,4 +1,4 @@
-const Stageny = require(`@stageny/base`)
+const Stageny = require(`@stageny/base/src`)
 const StagenyData = require(`@stageny/plugin-data`)
 const StagenyHelpers = require(`@stageny/plugin-helpers`)
 const StagenyLocalisation = require(`@stageny/plugin-i18n`)

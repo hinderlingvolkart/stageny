@@ -1,4 +1,4 @@
-const Stageny = require("../index")
+const Stageny = require("../src/index")
 const Path = require("path")
 const FS = require("fs")
 

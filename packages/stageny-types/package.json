@@ -1,0 +1,11 @@
+{
+	"name": "@stageny/types",
+	"version": "1.0.0",
+	"description": "Typescript type definitions for Stageny",
+	"types": "dist/index.d.ts",
+	"author": "Hinderling Volkart part of Dept",
+	"engines": {
+		"node": ">=12.2.0"
+	},
+	"license": "GPL-3.0-only"
+}

@@ -1,0 +1,12 @@
+{
+	"extends": "../../tsconfig-base.json",
+	"compilerOptions": {
+		"baseUrl": "src",
+		"rootDir": "src",
+		"module": "esnext",
+		"outDir": "dist/esm",
+		"target": "esnext"
+	},
+	"exclude": ["node_modules", "dist"],
+	"include": ["src"]
+}

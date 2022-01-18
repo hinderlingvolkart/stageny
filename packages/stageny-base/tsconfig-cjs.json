@@ -1,0 +1,13 @@
+{
+	"extends": "../../tsconfig-base.json",
+	"compilerOptions": {
+		"baseUrl": "src",
+		"rootDir": "src",
+		"module": "commonjs",
+		"outDir": "dist/cjs",
+		"target": "es2015",
+		"typeRoots": ["./node_modules/@types", "./typings"]
+	},
+	"exclude": ["node_modules", "dist", "typings"],
+	"include": ["src"]
+}

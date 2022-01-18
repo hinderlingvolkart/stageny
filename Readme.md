@@ -1,14 +1,15 @@
 ![Stageny Logo](extra/logo.svg)
+
 # Stageny
 
 Simple static site generator
 
-- template language agnostic (but focused on PUG)
-- focus on HTML only
-- supports layouts and components / partials
-- rather fast
-- simple core, extensible via plugins
-- focus on frontend development rather than Blogs
+-   template language agnostic (but focused on PUG)
+-   focus on HTML only
+-   supports layouts and components / partials
+-   rather fast
+-   simple core, extensible via plugins
+-   focus on frontend development rather than Blogs
 
 ## Mono Repo
 
@@ -17,8 +18,8 @@ We keep plugins, engines and our core as separate NPM modules, but have them in 
 ### Install
 
 ```
-npm install
-npm run bootstrap
+yarn
+yarn run bootstrap
 ```
 
 [lerna bootstrap](https://github.com/lerna/lerna/tree/master/commands/bootstrap#readme) will install all dependencies in all packages, but will on top symlink all packasges between each other, greatly simlifying development.
@@ -31,19 +32,18 @@ If you're all set, you can publish to NPM: `npm run publish`
 
 Please be extra cautious, because right now we've not set up a testing.
 
-
 ## Packages
 
-- [@stageny/base](./packages/stageny-base/)
-- [@stageny/util](./packages/stageny-util/)
-- [@stageny/engine-js](./packages/stageny-engine-js/)
-- [@stageny/engine-pug](./packages/stageny-engine-pug/)
-- [@stageny/plugin-data](./packages/stageny-plugin-data/)
-- [@stageny/plugin-helpers](./packages/stageny-plugin-helpers/)
-- [@stageny/plugin-i18n](./packages/stageny-plugin-i18n/)
-- [@stageny/plugin-pagination](./packages/stageny-plugin-pagination/)
-- [@stageny/plugin-serve](./packages/stageny-plugin-serve/)
-- [@stageny/plugin-watch](./packages/stageny-plugin-watch/)
+-   [@stageny/base](./packages/stageny-base/)
+-   [@stageny/util](./packages/stageny-util/)
+-   [@stageny/engine-js](./packages/stageny-engine-js/)
+-   [@stageny/engine-pug](./packages/stageny-engine-pug/)
+-   [@stageny/plugin-data](./packages/stageny-plugin-data/)
+-   [@stageny/plugin-helpers](./packages/stageny-plugin-helpers/)
+-   [@stageny/plugin-i18n](./packages/stageny-plugin-i18n/)
+-   [@stageny/plugin-pagination](./packages/stageny-plugin-pagination/)
+-   [@stageny/plugin-serve](./packages/stageny-plugin-serve/)
+-   [@stageny/plugin-watch](./packages/stageny-plugin-watch/)
 
 ## How to use
 
