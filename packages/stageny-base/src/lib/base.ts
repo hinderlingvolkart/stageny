@@ -17,6 +17,8 @@ import {
 	RunOptions,
 	StagenyRenderEngine,
 	StagenyData,
+	MinimalGlobInputs,
+	GlobInputs,
 } from "@stageny/types"
 
 type StagenyConfigProcessor = (config: StagenyConfig) => StagenyConfig
@@ -335,16 +337,19 @@ function processLayout(name, data) {
 	return result
 }
 
-function assignIfNot(target, source) {
+function assignIfNot(target: Record<string, any>, source: Record<string, any>) {
 	for (let key in source) {
-		if (!target.hasOwnProperty(key)) {
+		if (!Object.hasOwnProperty.call(target, key)) {
 			target[key] = source[key]
 		}
 	}
 }
 
-function processFile(file, data = {}) {
+function processFile(file: StagenyFile, data = {}): string {
 	compileTemplate(file)
+	if (!file.render)
+		throw new Error("No render function found for " + file.sourcePath)
+
 	let result = file.render(data)
 
 	compileData(file)
@@ -360,26 +365,26 @@ function processFile(file, data = {}) {
 	return result
 }
 
-function compileTemplate(file) {
+function compileTemplate(file: StagenyFile) {
 	if (!file.render) {
 		const perfItem = perf.start("Compile")
 		const engine = getEngineForFile(file)
 		if (typeof file.extension === "undefined")
 			file.extension = getExtension(file.sourcePath)
-		const engineOptions = config.engineOptions[file.extension]
+		const engineOptions = config.engineOptions[file.extension || ""]
 		if (!engine) return false
 		file.render = engine.compile(file, engineOptions)
 		perf.end(perfItem)
 	}
 }
-function compileData(file) {
+function compileData(file: StagenyFile) {
 	if (!file.meta) {
 		file.meta = Frontmatter.compile(file.rawMeta)
 	}
 }
 
 async function readComponents() {
-	const hash = {}
+	const hash: Record<string, boolean> = {}
 	const files = await readFiles(config.components)
 	components.clear()
 	files.forEach((file) => {
@@ -402,7 +407,7 @@ async function readComponents() {
 }
 
 async function readLayouts() {
-	const hash = {}
+	const hash: Record<string, boolean> = {}
 	const files = await readFiles(config.layouts)
 	layouts.clear()
 	files.forEach((file) => {
@@ -444,9 +449,9 @@ async function readPages() {
 	console.log(Colorize.green(String(pages.length).padStart(6)), "pages")
 }
 
-async function readFiles(inputs, filter = null) {
-	inputs = normalizeInputs(inputs)
-	let result = []
+async function readFiles(minmalInputs: any, filter = null) {
+	const inputs: GlobInputs[] = normalizeInputs(minmalInputs)
+	let result: Promise<StagenyFile>[] = []
 	for (let i = 0; i < inputs.length; i++) {
 		const input = inputs[i]
 		let paths = await Glob(input.glob, { cwd: input.base || "." })
@@ -469,7 +474,10 @@ function isSupportedFile(path) {
 	)
 }
 
-async function readFile(path, { base, dest, data: defaultData }) {
+async function readFile(
+	path: string,
+	{ base, dest }: GlobInputs
+): Promise<StagenyFile> {
 	const file = {
 		sourcePath: Path.join(base, path),
 		url: Path.join(dest, path),
@@ -482,7 +490,7 @@ async function readFile(path, { base, dest, data: defaultData }) {
 		let { data, content } = engine.read(file.sourcePath)
 		Object.assign(file, {
 			content,
-			meta: Object.assign({}, defaultData, data),
+			meta: Object.assign({}, data),
 		})
 	} else {
 		const rawContent = (await FS.readFile(file.sourcePath)).toString()
@@ -490,37 +498,35 @@ async function readFile(path, { base, dest, data: defaultData }) {
 		Object.assign(file, {
 			raw: rawContent,
 			content: matter.content,
-			rawMeta: Object.assign({}, defaultData, matter.data),
+			rawMeta: Object.assign({}, matter.data),
 		})
 	}
-	return file
+	return file as StagenyFile
 }
 
-function getExtension(path) {
-	const extensionMatch = path.match(/\.(\w+)$/)
-	if (extensionMatch) {
-		return extensionMatch[1]
-	}
-}
+const engineLookupCache: Record<
+	string,
+	{ engine: StagenyRenderEngine; extension: string | undefined }
+> = {}
 
-const engineLookupCache = {}
+function getEngineForFile(file: { sourcePath?: string; extension?: string }) {
+	let extension: string | undefined, engine: StagenyRenderEngine | undefined
 
-function getEngineForFile(file) {
-	let extension, handler
+	if (!file.sourcePath) return
 
 	if (engineLookupCache[file.sourcePath]) {
-		let { handler, extension } = engineLookupCache[file.sourcePath]
+		const { engine, extension } = engineLookupCache[file.sourcePath]
 		file.extension = extension
-		return handler
+		return engine
 	}
 
 	extension = getExtension(file.sourcePath)
 	file.extension = extension
 
 	// let's try to find in registered handlers
-	handler = templateEngines.find((h) => {
+	engine = templateEngines.find((h) => {
 		if (h.matchFile) {
-			return h.matchFile(file)
+			return h.matchFile(file as StagenyFile)
 		}
 		for (let format of h.inputFormats || []) {
 			if (format === extension) {
@@ -528,36 +534,37 @@ function getEngineForFile(file) {
 			}
 		}
 	})
-	if (!handler) {
-		handler = findJstransformer(extension)
+	if (!engine) {
+		const handler = findJstransformer(extension)
 		if (handler) {
 			const transformer = jstransformer(handler)
 			if (transformer.compile) {
-				handler = {
-					compile(file) {
+				engine = {
+					compile(file: StagenyFile) {
 						return transformer.compile(file.content).fn
 					},
 				}
 			} else if (transformer.render) {
-				handler = {
-					compile: function (file) {
-						return function (data) {
-							return transformer.render(file.content, data).body
+				engine = {
+					compile(file: StagenyFile) {
+						return function (data: StagenyData) {
+							return transformer.render(file.content, data)
+								.body as string
 						}
 					},
 				}
 			}
 		}
 	}
-	if (!handler) handler = false
-	engineLookupCache[file.sourcePath] = { handler, extension }
-	return handler
+	if (engine) engineLookupCache[file.sourcePath] = { engine, extension }
+	return engine
 }
 
-function getExtension(path) {
-	const match = path.match(/\.(\w+)$/)
-	if (match) return match[1]
-	return ""
+function getExtension(path: string): string | undefined {
+	const extensionMatch = path.match(/\.(\w+)$/)
+	if (extensionMatch) {
+		return extensionMatch[1]
+	}
 }
 
 function applyPlugins(key, ...rest) {

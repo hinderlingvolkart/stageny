@@ -20,6 +20,8 @@ export interface StagenyFile {
 	content?: string
 	result?: string
 	destination?: string
+	extension?: string
+	render?: (data: StagenyData) => string
 }
 
 export type StagenyData = { [key: string]: any }
@@ -50,8 +52,9 @@ export interface StagenyRenderEngine {
 		file: StagenyFile,
 		options?: any
 	) => (data?: StagenyData) => string
-	inputFormats: string[]
-	outputFormat: string
+	matchFile?: (file: StagenyFile) => boolean
+	inputFormats?: string[]
+	outputFormat?: string
 }
 
 export interface RunOptions {
