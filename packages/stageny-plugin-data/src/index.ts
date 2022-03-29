@@ -3,7 +3,7 @@ import path from "path"
 import globby from "globby"
 import yaml from "js-yaml"
 
-import { StagenyData, StagenyConfig } from "@stageny/types"
+import { StagenyData, StagenyConfig, StagenyPlugin } from "@stageny/types"
 
 var datastore: StagenyData = {}
 let stagenyConfig: StagenyConfig
@@ -76,10 +76,10 @@ function parseJS(value: string): StagenyData {
 	return require(value)
 }
 
-function plugin(options = { path: "data/*.*" }) {
+function plugin(options = { path: "data/*.*" }): StagenyPlugin {
 	return {
 		start() {
-			this.config((config) => {
+			this.config((config: StagenyConfig) => {
 				stagenyConfig = config
 				readAll(options.path)
 				// we could only update (add/replace/delete)
@@ -96,7 +96,7 @@ Object.assign(plugin, {
 	update: readAll,
 	read: readFile,
 	remove: removeFile,
-	get: function (key) {
+	get: function (key: string) {
 		if (typeof key === "string") {
 			return datastore[key]
 		}

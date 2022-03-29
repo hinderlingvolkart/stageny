@@ -12,12 +12,12 @@ export interface StagenyBase {
 	isSupportedFile: (path: string) => boolean
 }
 
-export interface StagenyFile {
+export interface StagenyFile<T = any> {
 	meta: StagenyData
 	rawMeta: StagenyData
 	url: string
 	sourcePath?: string
-	content?: string
+	content?: T
 	result?: string
 	destination?: string
 	extension?: string
@@ -43,13 +43,42 @@ export interface StagenyConfig {
 	alwaysRebuildSitemap: boolean
 }
 
-export interface StagenyRenderEngine {
+export type StagenyPluginFunction<T = []> = (
+	this: StagenyBase,
+	...rest: T
+) => void
+export type StagenyPluginFunctionFile = StagenyPluginFunction<[StagenyFile]>
+export type StagenyPluginFunctionFiles = StagenyPluginFunction<[StagenyFile[]]>
+export type StagenyPluginFunctionFileData = StagenyPluginFunction<
+	[StagenyFile, any]
+>
+export interface StagenyPlugin {
+	init?: StagenyPluginFunction
+	start?: StagenyPluginFunction
+	end?: StagenyPluginFunction
+	sitemap?: (this: StagenyBase, pages: StagenyFile[]) => void
+	beforepageprocess?: StagenyPluginFunctionFile
+	beforepagedata?: StagenyPluginFunctionFileData
+	afterpagedata?: StagenyPluginFunctionFileData
+	beforepagerender?: StagenyPluginFunctionFile
+	afterpagerender?: StagenyPluginFunctionFile
+	pageerror?: StagenyPluginFunctionFile
+	beforepagewrite?: StagenyPluginFunctionFile
+	afterpagewrite?: StagenyPluginFunctionFile
+	all?: (this: StagenyBase, ...rest: any) => void
+}
+
+export interface StagenyHelper extends Function {
+	on?: (event: string, callback: Function) => void
+}
+
+export interface StagenyRenderEngine<T = any> {
 	read?: (source: string) => {
 		data: StagenyData
-		content: string
+		content: T
 	}
 	compile: (
-		file: StagenyFile,
+		file: StagenyFile<T>,
 		options?: any
 	) => (data?: StagenyData) => string
 	matchFile?: (file: StagenyFile) => boolean

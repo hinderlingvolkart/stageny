@@ -1,11 +1,14 @@
 const Path = require("path")
 
+import pugEngine from "@stageny/engine-pug/src/lib/PugEngine"
 import {
 	MinimalGlobInputs,
 	StagenyFile,
 	StagenyConfig as StagenyConfigType,
 	StagenyFileNamer,
 	StagenyData,
+	StagenyRenderEngine,
+	StagenyPlugin,
 } from "@stageny/types"
 
 export default class StagenyConfig implements StagenyConfigType {
@@ -17,7 +20,7 @@ export default class StagenyConfig implements StagenyConfigType {
 	data!: StagenyData
 	formats!: string[]
 	engineOptions!: any
-	plugins!: any[]
+	plugins!: StagenyPlugin[]
 	dist!: string
 	verbose!: boolean
 	alwaysRebuildSitemap!: boolean

@@ -19,6 +19,8 @@ import {
 	StagenyData,
 	MinimalGlobInputs,
 	GlobInputs,
+	StagenyPlugin,
+	StagenyPluginFunction,
 } from "@stageny/types"
 
 type StagenyConfigProcessor = (config: StagenyConfig) => StagenyConfig
@@ -264,10 +266,6 @@ async function processPage(file: StagenyFile) {
 		}
 	}
 
-	if (result === false) {
-		throw new Error("Found not transformer for " + file.sourcePath)
-	}
-
 	// let's give plugins a chance to post process the result
 	file.result = result
 	file.destination = Path.join(config.dist, file.url)
@@ -275,13 +273,13 @@ async function processPage(file: StagenyFile) {
 	result = file.result
 
 	mkdirp.sync(Path.dirname(file.destination))
-	await FS.writeFile(file.destination, result)
+	await FS.writeFile(file.destination, result || "")
 	savedPages[file.url] = file.destination
 	applyPlugins("afterpagewrite", file)
 	delete file.result
 }
 
-function processComponent(name, localData, globalData) {
+function processComponent(name: string, localData: any, globalData: any) {
 	const file = components.get(name)
 	if (!file) {
 		throw new Error("Could not find component " + name)
@@ -304,14 +302,11 @@ function processComponent(name, localData, globalData) {
 	const meta = Frontmatter.process(file.meta, data)
 
 	const result = processFile(file, Object.assign({}, data, meta, localData))
-	if (result === false) {
-		throw new Error(`Missing transformer for ${file.sourcePath}`)
-	}
 	perf.end(perfItem)
 	return result
 }
 
-function processLayout(name, data) {
+function processLayout(name: string, data: any) {
 	const file = layouts.get(name)
 	if (!file) {
 		throw new Error("Could not find layout " + name)
@@ -331,9 +326,6 @@ function processLayout(name, data) {
 	Object.assign(mergedData, mergedData._meta.data)
 
 	const result = processFile(file, mergedData)
-	if (result === false) {
-		throw new Error(`Missing transformer for ${file.sourcePath}`)
-	}
 	return result
 }
 
@@ -370,9 +362,11 @@ function compileTemplate(file: StagenyFile) {
 		const perfItem = perf.start("Compile")
 		const engine = getEngineForFile(file)
 		if (typeof file.extension === "undefined")
-			file.extension = getExtension(file.sourcePath)
+			file.extension = getExtension(file.sourcePath!)
 		const engineOptions = config.engineOptions[file.extension || ""]
-		if (!engine) return false
+		if (!engine) {
+			throw new Error("Found no engine for " + file.sourcePath)
+		}
 		file.render = engine.compile(file, engineOptions)
 		perf.end(perfItem)
 	}
@@ -389,7 +383,7 @@ async function readComponents() {
 	components.clear()
 	files.forEach((file) => {
 		let name = config.componentName(file)
-		file.name = name
+		// file.name = name
 
 		if (hash[name]) {
 			console.warn("Duplicate component", name)
@@ -412,7 +406,7 @@ async function readLayouts() {
 	layouts.clear()
 	files.forEach((file) => {
 		let name = config.layoutName(file)
-		file.name = name
+		// file.name = name
 
 		if (hash[name]) {
 			console.warn("Duplicate layout", name)
@@ -455,9 +449,11 @@ async function readFiles(minmalInputs: any, filter = null) {
 	for (let i = 0; i < inputs.length; i++) {
 		const input = inputs[i]
 		let paths = await Glob(input.glob, { cwd: input.base || "." })
-		paths = paths.filter((path) =>
-			config.formats.includes(getExtension(path))
-		)
+		paths = paths.filter((path) => {
+			const ext = getExtension(path)
+			if (!ext) return false
+			return config.formats.includes(ext)
+		})
 		if (filter) {
 			paths = paths.filter(filter)
 		}
@@ -467,9 +463,11 @@ async function readFiles(minmalInputs: any, filter = null) {
 	return Promise.all(result)
 }
 
-function isSupportedFile(path) {
+function isSupportedFile(path: string) {
+	const ext = getExtension(path)
 	return !!(
-		config.formats.includes(getExtension(path)) &&
+		ext &&
+		config.formats.includes(ext) &&
 		getEngineForFile({ sourcePath: path })
 	)
 }
@@ -547,7 +545,7 @@ function getEngineForFile(file: { sourcePath?: string; extension?: string }) {
 			} else if (transformer.render) {
 				engine = {
 					compile(file: StagenyFile) {
-						return function (data: StagenyData) {
+						return function (data?: StagenyData) {
 							return transformer.render(file.content, data)
 								.body as string
 						}
@@ -567,10 +565,11 @@ function getExtension(path: string): string | undefined {
 	}
 }
 
-function applyPlugins(key, ...rest) {
+function applyPlugins(key: keyof StagenyPlugin, ...rest: any[]) {
 	config.plugins.forEach((plugin) => {
 		if (plugin[key]) {
-			plugin[key].apply(Stageny, rest)
+			const pluginFunc: StagenyPluginFunction<any[]> = plugin[key]!
+			pluginFunc.apply(Stageny, rest)
 		}
 		if (plugin.all) {
 			plugin.all.apply(Stageny, [key].concat(rest))
