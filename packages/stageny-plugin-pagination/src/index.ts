@@ -1,10 +1,12 @@
+import { StagenyPlugin } from "@stageny/types"
+
 const { cloneDeep } = require("@stageny/util")
 
-module.exports = function (options = {}) {
+module.exports = function (options = {}): StagenyPlugin {
 	return {
 		sitemap(pages) {
 			console.log("Scanning sitemap for pagination")
-			const prevPages = Object.assign([], pages)
+			const prevPages = [...pages]
 			pages.length = 0
 			prevPages.forEach((page) => {
 				if (page.meta.pagination) {
@@ -12,7 +14,7 @@ module.exports = function (options = {}) {
 						this,
 						this.config().data
 					)
-					collection.forEach((item) => {
+					collection.forEach((item: any) => {
 						const newPage = cloneDeep(page)
 						Object.assign(newPage.meta.data, item)
 						const metaAndData = Object.assign(

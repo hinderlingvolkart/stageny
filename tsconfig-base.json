@@ -13,7 +13,7 @@
 		"pretty": true,
 		"resolveJsonModule": true,
 		"skipLibCheck": true,
-		"strict": true,
+		"strict": false,
 		"strictPropertyInitialization": false,
 		"traceResolution": false
 	},

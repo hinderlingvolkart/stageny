@@ -1,1 +1,2 @@
-export * from "./lib/base"
+import Stageny from "./lib/base"
+export default Stageny

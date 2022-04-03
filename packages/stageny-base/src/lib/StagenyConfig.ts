@@ -1,6 +1,5 @@
 const Path = require("path")
 
-import pugEngine from "@stageny/engine-pug/src/lib/PugEngine"
 import {
 	MinimalGlobInputs,
 	StagenyFile,

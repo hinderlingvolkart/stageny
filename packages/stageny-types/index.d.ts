@@ -5,8 +5,8 @@ export interface StagenyBase {
 	layouts: any
 	sitemap: any[]
 	addEngine: (StagenyRenderEngine) => void
-	run: (RunOptions) => Promise<any>
-	render: (RunOptions) => Promise<any>
+	run: (RunOptions?) => Promise<any>
+	render: (RunOptions?) => Promise<any>
 	pause: () => void
 	resume: () => void
 	isSupportedFile: (path: string) => boolean

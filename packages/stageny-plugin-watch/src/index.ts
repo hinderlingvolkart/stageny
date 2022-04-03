@@ -1,12 +1,15 @@
 import Chokidar from "chokidar"
 import { Colorize } from "@stageny/util"
 import { normalizeInputs } from "@stageny/util"
+import { GlobInputs } from "@stageny/types"
 let started = false
+
+type ExtendedGlob = GlobInputs & { key?: string }
 
 function start(Stageny: any, options: any) {
 	const config = Stageny.config()
 	const toGlob = (key: string) => {
-		const inputs = normalizeInputs(config[`${key}s`])
+		const inputs: ExtendedGlob[] = normalizeInputs(config[`${key}s`])
 		inputs.forEach((input) => {
 			input.key = key
 		})

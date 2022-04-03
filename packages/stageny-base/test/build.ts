@@ -1,6 +1,6 @@
-const Stageny = require("../src/index")
-const Path = require("path")
-const FS = require("fs")
+import Stageny from "../src/index"
+import Path from "path"
+import FS from "fs"
 
 try {
 	FS.unlinkSync(Path.join(__dirname, "dist/index.html"))

@@ -1,3 +1,5 @@
+import { StagenyFile, StagenyPlugin } from "../../stageny-types"
+
 const cloneDeep = require("clone-deep")
 var Path = require("path")
 
@@ -8,11 +10,14 @@ options:
 */
 
 module.exports = function (
-	options = { lang: ["de", "en", "fr"], exclude: null }
-) {
+	options: {
+		lang?: string[] | ((page: StagenyFile) => string[])
+		exclude?: (page: StagenyFile) => boolean
+	} = { lang: ["de", "en", "fr"] }
+): StagenyPlugin {
 	return {
 		sitemap(pages) {
-			const prevPages = Object.assign([], pages)
+			const prevPages = [...pages]
 			pages.length = 0
 			prevPages.forEach((page) => {
 				if (options.exclude && options.exclude(page)) {

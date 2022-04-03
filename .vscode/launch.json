@@ -1,18 +1,25 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch Program",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "cwd": "${workspaceFolder}/packages/stageny-base/test/",
-            "program": "${workspaceFolder}/packages/stageny-base/test/build.js"
-        }
-    ]
+	// Use IntelliSense to learn about possible attributes.
+	// Hover to view descriptions of existing attributes.
+	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"type": "pwa-node",
+			"name": "Run test build",
+			"runtimeExecutable": "node",
+			"runtimeArgs": ["--loader", "ts-node/esm"],
+			"request": "launch",
+			"args": ["build.js"],
+			"cwd": "${workspaceFolder}/packages/stageny-base/test/"
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Launch Program",
+			"skipFiles": ["<node_internals>/**"],
+			"cwd": "${workspaceFolder}/packages/stageny-base/test/",
+			"program": "${workspaceFolder}/packages/stageny-base/test/build.js"
+		}
+	]
 }

@@ -7,7 +7,7 @@ import { Perf, Colorize, normalizeInputs } from "@stageny/util"
 import jstransformer from "jstransformer"
 import findJstransformer from "inputformat-to-jstransformer"
 import config from "./config"
-import PugEngine from "@stageny/engine-pug/src"
+import PugEngine from "@stageny/engine-pug"
 import JavascriptEngine from "@stageny/engine-js"
 import { renderAsHtml as renderError } from "./renderError"
 import {

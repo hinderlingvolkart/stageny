@@ -1,26 +1,27 @@
 {
-  "name": "stageny",
-  "version": "1.0.0",
-  "main": "index.js",
-  "engines": {
-    "node": ">=12.0.0"
-  },
-  "license": "GPL-3.0-only",
-  "dependencies": {
-    "lerna": "^4.0.0"
-  },
-  "prettier": {
-    "semi": false,
-    "useTabs": true
-  },
-  "scripts": {
-    "bootstrap": "lerna bootstrap",
-    "version": "lerna version",
-    "publish": "lerna publish from-package"
-  },
-  "private": true,
-  "workspaces": [
-    "packages/*",
-    "test/*"
-  ]
+	"name": "stageny",
+	"version": "1.0.0",
+	"main": "index.js",
+	"engines": {
+		"node": ">=12.0.0"
+	},
+	"license": "GPL-3.0-only",
+	"dependencies": {
+		"lerna": "^4.0.0"
+	},
+	"prettier": {
+		"semi": false,
+		"useTabs": true
+	},
+	"scripts": {
+		"build": "echo 'stageny-util' && cd packages/stageny-util && yarn build && echo 'stageny-engine-js' && cd ../stageny-engine-js && yarn build && echo 'stageny-engine-pug' && cd ../stageny-engine-pug && yarn build && echo 'stageny-plugin-data' && cd ../stageny-plugin-data && yarn build && echo 'stageny-plugin-helpers' && cd ../stageny-plugin-helpers && yarn build && echo 'stageny-plugin-i18n' && cd ../stageny-plugin-i18n && yarn build && echo 'stageny-plugin-pagination' && cd ../stageny-plugin-pagination && yarn build && echo 'stageny-plugin-serve' && cd ../stageny-plugin-serve && yarn build && echo 'stageny-plugin-watch' && cd ../stageny-plugin-watch && yarn build && echo 'stageny-base' && cd ../stageny-base && yarn build",
+		"bootstrap": "lerna bootstrap",
+		"version": "lerna version",
+		"publish": "lerna publish from-package"
+	},
+	"private": true,
+	"workspaces": [
+		"packages/*",
+		"test/*"
+	]
 }
