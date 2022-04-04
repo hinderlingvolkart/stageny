@@ -9,7 +9,7 @@ options:
 	exclude: Function(page) => Boolean
 */
 
-module.exports = function (
+export default function (
 	options: {
 		lang?: string[] | ((page: StagenyFile) => string[])
 		exclude?: (page: StagenyFile) => boolean

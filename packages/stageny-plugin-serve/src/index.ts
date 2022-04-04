@@ -1,23 +1,50 @@
-let bs
+import type { StagenyBase, StagenyFile, StagenyPlugin } from "@stageny/types"
+import type * as http from "http"
+import browsersync from "browser-sync"
+import parseUrl from "url-parse"
 
-function start(Stageny, options = {}) {
-	const browsersync = require("browser-sync")
-	const parseUrl = require("url-parse")
+let bs: ReturnType<typeof browsersync.create>
+
+interface Options {
+	immediate?: boolean
+	middleware?: StagenyMiddleware[] | StagenyMiddleware
+}
+
+export type Middleware = (
+	req: http.IncomingMessage,
+	res: http.ServerResponse,
+	next: () => void
+) => void
+
+export type StagenyMiddleware = {
+	route: string
+	handle: Middleware
+}
+
+function start(Stageny: StagenyBase, options: Options = {}) {
 	const config = Stageny.config()
 	const dist = config.dist
 
 	let middleware = [
-		(req, res, next) => {
+		(
+			req: http.IncomingMessage,
+			res: http.ServerResponse,
+			next: () => void
+		) => {
 			bs.pause()
-			Stageny.pause(true)
+			Stageny.pause()
 			next()
 		},
 		// that is where we'll insert middleware from options
-		(req, res, next) => {
-			const unicodeUrl = decodeURIComponent(req.url)
+		(
+			req: http.IncomingMessage,
+			res: http.ServerResponse,
+			next: () => void
+		) => {
+			const unicodeUrl = decodeURIComponent(req.url!)
 			const parsedUrl = parseUrl(unicodeUrl).pathname
 			const matchExtension = parsedUrl.match(/\w+\.(\w+)$/)
-			const potentialPaths = []
+			const potentialPaths: string[] = []
 			if (matchExtension) {
 				potentialPaths.push(parsedUrl)
 			} else {
@@ -29,7 +56,8 @@ function start(Stageny, options = {}) {
 					potentialPaths.push(`${parsedUrl}/index.html`)
 				}
 			}
-			const pageFilter = (page) => potentialPaths.includes(page.url)
+			const pageFilter = (page: StagenyFile) =>
+				potentialPaths.includes(page.url)
 			const page = Stageny.sitemap.find(pageFilter)
 			if (page) {
 				Stageny.resume()
@@ -50,7 +78,11 @@ function start(Stageny, options = {}) {
 				next()
 			}
 		},
-		(req, res, next) => {
+		(
+			req: http.IncomingMessage,
+			res: http.ServerResponse,
+			next: () => void
+		) => {
 			Stageny.resume()
 			bs.resume()
 			next()
@@ -62,7 +94,12 @@ function start(Stageny, options = {}) {
 	}))
 
 	if (options.middleware) {
-		middleware.splice.apply(middleware, [1, 0].concat(options.middleware))
+		let args: [a: number, b: number, ...rest: StagenyMiddleware[]] = [1, 0]
+		if (Array.isArray(options.middleware)) {
+			args.push.apply(args, options.middleware)
+		} else {
+			args.push(options.middleware)
+		}
 	}
 
 	const bsOptions = Object.assign(
@@ -75,7 +112,7 @@ function start(Stageny, options = {}) {
 			},
 			files: [dist, "!**/*.html"],
 			open: true,
-			port: parseInt(process.env.PORT, 10) || 3000,
+			port: (process.env.PORT && parseInt(process.env.PORT, 10)) || 3000,
 		},
 		options,
 		{
@@ -87,11 +124,11 @@ function start(Stageny, options = {}) {
 	bs.init(bsOptions)
 }
 
-function plugin(options = { immediate: false }) {
+function plugin(options: Options = { immediate: false }): StagenyPlugin {
 	const immediate = options.immediate
 	delete options.immediate
 
-	function startIfNot() {
+	function startIfNot(this: StagenyBase) {
 		if (!bs) {
 			start(this, options)
 		}
@@ -114,4 +151,4 @@ Object.assign(plugin, {
 	},
 })
 
-module.exports = plugin
+export default plugin

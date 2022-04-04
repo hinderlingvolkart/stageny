@@ -67,4 +67,4 @@ plugin.get = function (key: string) {
 	return helpers
 }
 
-module.exports = plugin
+export default plugin

@@ -1,6 +1,6 @@
 const Stageny = require(`./base`)
-const StagenyServe = require(`@stageny/plugin-serve`)
-const StagenyWatch = require(`@stageny/plugin-watch`)
+const { default: StagenyServe } = require(`@stageny/plugin-serve`)
+const { default: StagenyWatch } = require(`@stageny/plugin-watch`)
 
 Stageny.config((config) => {
 	config.plugins.push(StagenyServe())

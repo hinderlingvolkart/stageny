@@ -2,7 +2,7 @@ import { StagenyPlugin } from "@stageny/types"
 
 const { cloneDeep } = require("@stageny/util")
 
-module.exports = function (options = {}): StagenyPlugin {
+export default function (options = {}): StagenyPlugin {
 	return {
 		sitemap(pages) {
 			console.log("Scanning sitemap for pagination")

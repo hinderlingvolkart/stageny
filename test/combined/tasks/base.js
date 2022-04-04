@@ -1,9 +1,11 @@
-const Stageny = require(`@stageny/base`)
-const StagenyData = require(`@stageny/plugin-data`)
-const StagenyHelpers = require(`@stageny/plugin-helpers`)
-const StagenyLocalisation = require(`@stageny/plugin-i18n`)
-const StagenyPagination = require(`@stageny/plugin-pagination`)
+const { default: Stageny } = require(`@stageny/base`)
+const { default: StagenyData } = require(`@stageny/plugin-data`)
+const { default: StagenyHelpers } = require(`@stageny/plugin-helpers`)
+const { default: StagenyLocalisation } = require(`@stageny/plugin-i18n`)
+const { default: StagenyPagination } = require(`@stageny/plugin-pagination`)
 const rimraf = require("rimraf")
+
+console.dir(Stageny)
 
 rimraf.sync(Stageny.config().dist)
 

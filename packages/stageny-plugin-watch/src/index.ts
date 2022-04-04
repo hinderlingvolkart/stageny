@@ -1,3 +1,4 @@
+import type { StagenyPlugin } from "@stageny/types"
 import Chokidar from "chokidar"
 import { Colorize } from "@stageny/util"
 import { normalizeInputs } from "@stageny/util"
@@ -76,7 +77,7 @@ function watch(glob: string | string[], options = {}) {
 	)
 }
 
-const plugin = function (options = {}) {
+const plugin = function (options = {}): StagenyPlugin {
 	return {
 		start() {
 			if (!started) {
@@ -86,4 +87,4 @@ const plugin = function (options = {}) {
 	}
 }
 
-module.exports = plugin
+export default plugin
