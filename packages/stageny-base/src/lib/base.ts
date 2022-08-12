@@ -36,9 +36,9 @@ let perf: Perf
 let currentRun: Promise<void> | null
 
 const Stageny: StagenyBase = {
-	config(process: StagenyConfigProcessor | null = null) {
+	async config(process: StagenyConfigProcessor | null = null) {
 		if (process) {
-			const result = process(config)
+			const result = await process(config)
 			if (result) {
 				Object.assign(config, result)
 			}
@@ -48,6 +48,7 @@ const Stageny: StagenyBase = {
 		}
 		return config
 	},
+	getConfig: () => config,
 	init,
 	get components() {
 		return components
@@ -96,9 +97,9 @@ function runNext(options: RunOptions, runMethod = run) {
 	}
 }
 
-function init() {
+async function init() {
 	if (!initialised) {
-		applyPlugins("init")
+		await applyPlugins("init")
 		return true
 	}
 	return false
@@ -113,14 +114,14 @@ async function run(options: RunOptions) {
 	await init()
 
 	isPaused = true
-	applyPlugins("start")
+	await applyPlugins("start")
 
 	perfMeasure = overallPerf.start("Reading sitemap")
 	await read()
 	overallPerf.end(perfMeasure)
 
 	perfMeasure = overallPerf.start("Sitemap plugins")
-	applyPlugins("sitemap", pages)
+	await applyPlugins("sitemap", pages)
 	// sort pages by url, this a) is nice and b) eases iterations
 	// at this point no modification to sitemap should happen anymore
 	pages.sort((a, b) => (a.url == b.url ? 0 : +(a.url > b.url) || -1))
@@ -130,7 +131,7 @@ async function run(options: RunOptions) {
 	await process(options)
 	overallPerf.end(perfMeasure)
 
-	applyPlugins("end")
+	await applyPlugins("end")
 
 	overallPerf.print()
 	if (config.verbose) {
@@ -203,7 +204,7 @@ async function unlink(path: string) {
 async function processPage(file: StagenyFile) {
 	console.log("📃 Rendering page", file.url)
 
-	applyPlugins("beforepageprocess", file)
+	await applyPlugins("beforepageprocess", file)
 
 	const mergedData: StagenyData = {}
 	Object.assign(
@@ -235,20 +236,20 @@ async function processPage(file: StagenyFile) {
 	try {
 		compileTemplate(file)
 
-		applyPlugins("beforepagedata", file, mergedData)
+		await applyPlugins("beforepagedata", file, mergedData)
 		Object.assign(mergedData, config.data, { _data: config.data })
 		if (file.meta && file.meta.data)
 			Object.assign(mergedData, file.meta.data)
 		file.meta = Frontmatter.process(file.meta, mergedData)
 		Object.assign(mergedData, { _meta: file.meta })
 		Object.assign(mergedData, file.meta.data)
-		applyPlugins("afterpagedata", file, mergedData)
+		await applyPlugins("afterpagedata", file, mergedData)
 
-		applyPlugins("beforepagerender", file)
+		await applyPlugins("beforepagerender", file)
 		result = processFile(file, mergedData)
-		applyPlugins("afterpagerender", file)
+		await applyPlugins("afterpagerender", file)
 	} catch (error) {
-		applyPlugins("pageerror", file)
+		await applyPlugins("pageerror", file)
 		console.error(
 			"🚨 Problem processing",
 			"\n  🎬",
@@ -269,13 +270,13 @@ async function processPage(file: StagenyFile) {
 	// let's give plugins a chance to post process the result
 	file.result = result
 	file.destination = Path.join(config.dist, file.url)
-	applyPlugins("beforepagewrite", file)
+	await applyPlugins("beforepagewrite", file)
 	result = file.result
 
 	mkdirp.sync(Path.dirname(file.destination))
 	await FS.writeFile(file.destination, result || "")
 	savedPages[file.url] = file.destination
-	applyPlugins("afterpagewrite", file)
+	await applyPlugins("afterpagewrite", file)
 	delete file.result
 }
 
@@ -565,16 +566,16 @@ function getExtension(path: string): string | undefined {
 	}
 }
 
-function applyPlugins(key: keyof StagenyPlugin, ...rest: any[]) {
-	config.plugins.forEach((plugin) => {
+async function applyPlugins(key: keyof StagenyPlugin, ...rest: any[]) {
+	for (let plugin of config.plugins) {
 		if (plugin[key]) {
 			const pluginFunc: StagenyPluginFunction<any[]> = plugin[key]!
-			pluginFunc.apply(Stageny, rest)
+			await pluginFunc.apply(Stageny, rest)
 		}
 		if (plugin.all) {
-			plugin.all.apply(Stageny, [key].concat(rest))
+			await plugin.all.apply(Stageny, [key].concat(rest))
 		}
-	})
+	}
 }
 
 export default Stageny

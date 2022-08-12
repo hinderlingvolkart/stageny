@@ -12,7 +12,7 @@ export default function (options = {}): StagenyPlugin {
 				if (page.meta.pagination) {
 					const collection = page.meta.pagination.call(
 						this,
-						this.config().data
+						this.getConfig().data
 					)
 					collection.forEach((item: any) => {
 						const newPage = cloneDeep(page)

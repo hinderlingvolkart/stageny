@@ -1,9 +1,12 @@
 export interface StagenyBase {
-	config: (process: StagenyConfigProcessor | null = null) => StagenyConfig
-	init: () => boolean
+	config: (
+		process: StagenyConfigProcessor | null = null
+	) => Promise<StagenyConfig> | StagenyConfig
+	getConfig: () => StagenyConfig
+	init: () => Promise<boolean>
 	components: any
 	layouts: any
-	sitemap: any[]
+	sitemap: StagenyFile[]
 	addEngine: (StagenyRenderEngine) => void
 	run: (RunOptions?) => Promise<any>
 	render: (RunOptions?) => Promise<any>
@@ -46,7 +49,7 @@ export interface StagenyConfig {
 export type StagenyPluginFunction<T = []> = (
 	this: StagenyBase,
 	...rest: T
-) => void
+) => void | Promise<void>
 export type StagenyPluginFunctionFile = StagenyPluginFunction<[StagenyFile]>
 export type StagenyPluginFunctionFiles = StagenyPluginFunction<[StagenyFile[]]>
 export type StagenyPluginFunctionFileData = StagenyPluginFunction<
@@ -56,7 +59,7 @@ export interface StagenyPlugin {
 	init?: StagenyPluginFunction
 	start?: StagenyPluginFunction
 	end?: StagenyPluginFunction
-	sitemap?: (this: StagenyBase, pages: StagenyFile[]) => void
+	sitemap?: StagenyPluginFunctionFiles
 	beforepageprocess?: StagenyPluginFunctionFile
 	beforepagedata?: StagenyPluginFunctionFileData
 	afterpagedata?: StagenyPluginFunctionFileData

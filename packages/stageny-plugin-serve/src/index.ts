@@ -22,7 +22,7 @@ export type StagenyMiddleware = {
 }
 
 function start(Stageny: StagenyBase, options: Options = {}) {
-	const config = Stageny.config()
+	const config = Stageny.getConfig()
 	const dist = config.dist
 
 	let middleware = [
@@ -34,6 +34,11 @@ function start(Stageny: StagenyBase, options: Options = {}) {
 			bs.pause()
 			Stageny.pause()
 			next()
+
+			req.on("close", () => {
+				bs.resume()
+				Stageny.resume()
+			})
 		},
 		// that is where we'll insert middleware from options
 		(
@@ -78,15 +83,6 @@ function start(Stageny: StagenyBase, options: Options = {}) {
 				next()
 			}
 		},
-		(
-			req: http.IncomingMessage,
-			res: http.ServerResponse,
-			next: () => void
-		) => {
-			Stageny.resume()
-			bs.resume()
-			next()
-		},
 	].map((handle) => ({
 		route: "",
 		// override: true, // this will put our middleware to the beginning, before serve-static
@@ -94,11 +90,10 @@ function start(Stageny: StagenyBase, options: Options = {}) {
 	}))
 
 	if (options.middleware) {
-		let args: [a: number, b: number, ...rest: StagenyMiddleware[]] = [1, 0]
 		if (Array.isArray(options.middleware)) {
-			args.push.apply(args, options.middleware)
+			middleware.splice(1, 0, ...options.middleware)
 		} else {
-			args.push(options.middleware)
+			middleware.splice(1, 0, options.middleware)
 		}
 	}
 
@@ -145,10 +140,6 @@ function plugin(options: Options = { immediate: false }): StagenyPlugin {
 	}
 }
 
-Object.assign(plugin, {
-	getBrowsersync() {
-		return bs
-	},
-})
+plugin.getBrowsersync = () => bs
 
 export default plugin

@@ -8,7 +8,7 @@ let started = false
 type ExtendedGlob = GlobInputs & { key?: string }
 
 function start(Stageny: any, options: any) {
-	const config = Stageny.config()
+	const config = Stageny.getConfig()
 	const toGlob = (key: string) => {
 		const inputs: ExtendedGlob[] = normalizeInputs(config[`${key}s`])
 		inputs.forEach((input) => {
