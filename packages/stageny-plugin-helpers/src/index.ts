@@ -1,8 +1,8 @@
 import { StagenyHelper, StagenyPlugin } from "@stageny/types"
 
-var globby = require("globby")
-var Path = require("path")
-const { Colorize } = require("@stageny/util")
+import globby from "globby";
+import Path from "path";
+import { Colorize } from "@stageny/util";
 var helpers: Record<string, StagenyHelper> = {}
 var savedOptions: {
 	path?: string

@@ -1,4 +1,4 @@
-import Frontmatter from "./frontmatter"
+import Frontmatter from "./frontmatter.js"
 import FS from "fs/promises"
 import Glob from "globby"
 import Path from "path"
@@ -6,10 +6,10 @@ import mkdirp from "mkdirp"
 import { Perf, Colorize, normalizeInputs } from "@stageny/util"
 import jstransformer from "jstransformer"
 import findJstransformer from "inputformat-to-jstransformer"
-import config from "./config"
+import config from "./config.js"
 import PugEngine from "@stageny/engine-pug"
 import JavascriptEngine from "@stageny/engine-js"
-import { renderAsHtml as renderError } from "./renderError"
+import { renderAsHtml as renderError } from "./renderError.js"
 import {
 	StagenyFile,
 	StagenyConfig,

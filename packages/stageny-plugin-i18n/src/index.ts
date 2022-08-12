@@ -1,7 +1,7 @@
-import { StagenyFile, StagenyPlugin } from "../../stageny-types"
+import type { StagenyFile, StagenyPlugin } from "../../stageny-types"
 
-const cloneDeep = require("clone-deep")
-var Path = require("path")
+import cloneDeep from "clone-deep";
+import Path from "path";
 
 /*
 options:
@@ -38,7 +38,6 @@ export default function (
 					pages.push(page) // or not at all?
 				}
 			})
-			return pages
 		},
 	}
 }

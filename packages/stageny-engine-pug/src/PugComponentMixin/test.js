@@ -1,5 +1,5 @@
 import Pug from "pug"
-import ComponentMixinPlugin from "./index"
+import ComponentMixinPlugin from "./index.js"
 ;["a", "b", "c", "d", "e", "f"].forEach((key) => {
 	try {
 		const html = Pug.renderFile(`test/${key}.pug`, {

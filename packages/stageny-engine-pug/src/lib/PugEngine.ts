@@ -1,4 +1,4 @@
-import ComponentMixin from "../PugComponentMixin/index"
+import ComponentMixin from "../PugComponentMixin/index.js"
 import Pug from "pug"
 import { StagenyRenderEngine } from "@stageny/types"
 

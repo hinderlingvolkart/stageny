@@ -1,2 +1,2 @@
-import Stageny from "./lib/base"
+import Stageny from "./lib/base.js"
 export default Stageny

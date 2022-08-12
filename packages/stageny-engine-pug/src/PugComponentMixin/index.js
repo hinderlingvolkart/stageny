@@ -1,4 +1,4 @@
-import ComponentMixin from "./ComponentMixin"
+import ComponentMixin from "./ComponentMixin.js"
 
 export default function () {
 	return {

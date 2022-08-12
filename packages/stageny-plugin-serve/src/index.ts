@@ -2,6 +2,7 @@ import type { StagenyBase, StagenyFile, StagenyPlugin } from "@stageny/types"
 import type * as http from "http"
 import browsersync from "browser-sync"
 import parseUrl from "url-parse"
+import send from "send"
 
 let bs: ReturnType<typeof browsersync.create>
 
@@ -71,7 +72,6 @@ function start(Stageny: StagenyBase, options: Options = {}) {
 					filter: pageFilter,
 				}).then(() => {
 					try {
-						const send = require("send")
 						const page = Stageny.sitemap.find(pageFilter)
 						send(req, page.destination).pipe(res)
 						bs.resume()

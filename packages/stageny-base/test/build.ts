@@ -1,4 +1,4 @@
-import Stageny from "../src/index"
+import Stageny from "../src/index.js"
 import Path from "path"
 import FS from "fs"
 

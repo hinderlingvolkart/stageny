@@ -1,6 +1,6 @@
-import { default as cloneObject } from "./lib/cloneObject"
-import { default as normalizeInputs } from "./lib/normalizeInputs"
-import { default as Perf } from "./lib/perf"
+import { default as cloneObject } from "./lib/cloneObject.js"
+import { default as normalizeInputs } from "./lib/normalizeInputs.js"
+import { default as Perf } from "./lib/perf.js"
 
 export { cloneObject, normalizeInputs, Perf }
 

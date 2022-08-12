@@ -8,7 +8,7 @@ const compiled = Pug.compileFile("ComponentMixin.pug", {
 				const result = JSON.stringify(ast.nodes, null, 2)
 				FS.writeFileSync(
 					"ComponentMixin.js",
-					`module.exports = ${result}`
+					`export default ${result}`
 				)
 
 				return {

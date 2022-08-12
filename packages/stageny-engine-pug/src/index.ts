@@ -1,1 +1,1 @@
-export { default as default } from "./lib/PugEngine"
+export { default as default } from "./lib/PugEngine.js"

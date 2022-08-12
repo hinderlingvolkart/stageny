@@ -1,6 +1,6 @@
 import { StagenyPlugin } from "@stageny/types"
 
-const { cloneDeep } = require("@stageny/util")
+import { cloneObject } from "@stageny/util";
 
 export default function (options = {}): StagenyPlugin {
 	return {
@@ -15,7 +15,7 @@ export default function (options = {}): StagenyPlugin {
 						this.getConfig().data
 					)
 					collection.forEach((item: any) => {
-						const newPage = cloneDeep(page)
+						const newPage = cloneObject(page)
 						Object.assign(newPage.meta.data, item)
 						const metaAndData = Object.assign(
 							{},
@@ -37,7 +37,6 @@ export default function (options = {}): StagenyPlugin {
 					pages.push(page)
 				}
 			})
-			return pages
 		},
 	}
 }
