@@ -1,6 +1,6 @@
 {
 	"name": "@stageny/base",
-	"version": "2.0.0-alpha.0",
+	"version": "2.0.0-alpha.2",
 	"description": "Simplistic static site generator",
 	"type": "module",
 	"module": "dist/index.js",
@@ -16,9 +16,9 @@
 	},
 	"license": "GPL-3.0-only",
 	"dependencies": {
-		"@stageny/engine-js": "^2.0.0-alpha.0",
-		"@stageny/engine-pug": "^2.0.0-alpha.0",
-		"@stageny/util": "^2.0.0-alpha.0",
+		"@stageny/engine-js": "^2.0.0-alpha.2",
+		"@stageny/engine-pug": "^2.0.0-alpha.2",
+		"@stageny/util": "^2.0.0-alpha.2",
 		"clone-deep": "^4.0.1",
 		"globby": "^13.1.2",
 		"gray-matter": "^4.0.3",
@@ -29,7 +29,7 @@
 		"rimraf": "^3.0.2"
 	},
 	"devDependencies": {
-		"@stageny/types": "^2.0.0-alpha.0",
+		"@stageny/types": "^2.0.0-alpha.2",
 		"@types/mkdirp": "^1.0.2",
 		"@types/node": "^18.7.4",
 		"ts-node": "^10.9.1",
