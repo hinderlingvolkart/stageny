@@ -2,21 +2,15 @@
 	"name": "@stageny/plugin-i18n",
 	"version": "1.0.12",
 	"description": "i18n support for stageny",
-	"main": "dist/cjs/index.js",
-	"module": "dist/esm/index.js",
-	"types": "dist/esm/index.d.ts",
-	"exports": {
-		".": {
-			"import": "./dist/esm/index.js",
-			"require": "./dist/cjs/index.js"
-		}
-	},
+	"module": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"exports": "./dist/index.js",
 	"author": "Hinderling Volkart part of Dept",
 	"engines": {
 		"node": ">=12.0.0"
 	},
 	"scripts": {
-		"build": "rm -fr dist/* && tsc -p ./tsconfig.json && tsc -p ./tsconfig-cjs.json && ../../fixup.sh"
+		"build": "rm -fr dist/* && tsc && ../../fixup.sh"
 	},
 	"license": "GPL-3.0-only",
 	"dependencies": {
@@ -25,7 +19,7 @@
 	},
 	"devDependencies": {
 		"@stageny/types": "^1.0.0",
-		"@types/node": "^17.0.9",
-		"typescript": "^4.5.4"
+		"@types/node": "^18.7.4",
+		"typescript": "^4.7.4"
 	}
 }

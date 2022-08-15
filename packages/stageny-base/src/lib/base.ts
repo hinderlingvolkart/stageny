@@ -1,6 +1,6 @@
 import Frontmatter from "./frontmatter.js"
 import FS from "fs/promises"
-import Glob from "globby"
+import { globby } from "globby"
 import Path from "path"
 import mkdirp from "mkdirp"
 import { Perf, Colorize, normalizeInputs } from "@stageny/util"
@@ -342,7 +342,10 @@ function processFile(file: StagenyFile, data = {}): string {
 	compileTemplate(file)
 	if (!file.render)
 		throw new Error("No render function found for " + file.sourcePath)
-
+	if (typeof file.render !== "function")
+		throw new Error(
+			"Render function is not a function for " + file.sourcePath
+		)
 	let result = file.render(data)
 
 	compileData(file)
@@ -449,7 +452,7 @@ async function readFiles(minmalInputs: any, filter = null) {
 	let result: Promise<StagenyFile>[] = []
 	for (let i = 0; i < inputs.length; i++) {
 		const input = inputs[i]
-		let paths = await Glob(input.glob, { cwd: input.base || "." })
+		let paths = await globby(input.glob, { cwd: input.base || "." })
 		paths = paths.filter((path) => {
 			const ext = getExtension(path)
 			if (!ext) return false
@@ -486,7 +489,7 @@ async function readFile(
 	}
 	const engine = getEngineForFile(file)
 	if (engine && engine.read) {
-		let { data, content } = engine.read(file.sourcePath)
+		let { data, content } = await engine.read(file.sourcePath)
 		Object.assign(file, {
 			content,
 			meta: Object.assign({}, data),

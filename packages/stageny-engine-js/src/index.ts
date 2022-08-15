@@ -1,21 +1,19 @@
 import Path from "path"
 import { StagenyRenderEngine } from "@stageny/types"
+import { importUncached } from "@stageny/util"
 
 const jsEngine: StagenyRenderEngine = {
-	read(source) {
-		var requirePath = Path.relative(__dirname, source)
-		delete require.cache[require.resolve(requirePath)]
-		const result = require(requirePath)
-		if (result.data) {
-			return {
-				data: result.data,
-				content: result.render,
-			}
-		} else {
-			return {
-				data: {},
-				content: result,
-			}
+	async read(source) {
+		var importPath = Path.resolve(process.cwd(), source)
+		const result = await importUncached(importPath)
+		return {
+			data:
+				typeof result.data === "function"
+					? await result.data()
+					: typeof result.data === "object"
+					? result.data
+					: {},
+			content: result.default || result.render,
 		}
 	},
 	compile: function (file) {

@@ -1,7 +1,8 @@
+export type OptionalPromise<T> = T | Promise<T>
 export interface StagenyBase {
 	config: (
 		process: StagenyConfigProcessor | null = null
-	) => Promise<StagenyConfig> | StagenyConfig
+	) => Promise<StagenyConfig>
 	getConfig: () => StagenyConfig
 	init: () => Promise<boolean>
 	components: any
@@ -76,10 +77,10 @@ export interface StagenyHelper extends Function {
 }
 
 export interface StagenyRenderEngine<T = any> {
-	read?: (source: string) => {
+	read?: (source: string) => OptionalPromise<{
 		data: StagenyData
 		content: T
-	}
+	}>
 	compile: (
 		file: StagenyFile<T>,
 		options?: any

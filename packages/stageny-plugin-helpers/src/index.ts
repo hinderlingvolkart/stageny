@@ -1,34 +1,54 @@
 import { StagenyHelper, StagenyPlugin } from "@stageny/types"
 
-import globby from "globby";
-import Path from "path";
-import { Colorize } from "@stageny/util";
-var helpers: Record<string, StagenyHelper> = {}
+import { globbySync } from "globby"
+import Path from "path"
+import { Colorize, dirname, importUncached } from "@stageny/util"
+var helpers: Record<string, any> = {}
+var handlers: Function[]
 var savedOptions: {
 	path?: string
 } = {}
 
-function update() {
+async function update() {
 	helpers = {}
-	var files = globby.sync(savedOptions.path)
-	files.forEach(function (file: string) {
-		var requirePath = Path.relative(__dirname, file)
-		delete require.cache[require.resolve(requirePath)]
-		var key = Path.basename(file).replace(/\..+$/, "")
-		try {
-			helpers[key] = require(requirePath)
-			if (typeof helpers[key] !== "function") {
-				throw new Error(`Helper «${key}» is not a function.`)
+	handlers = []
+	var files = globbySync(savedOptions.path)
+	await Promise.all(
+		files.map(async (file: string) => {
+			var importPath = Path.resolve(process.cwd(), file)
+			var key = Path.basename(file).replace(/\..+$/, "")
+			try {
+				const helperImport = await importUncached(importPath)
+				for (const importKey in helperImport) {
+					const helper = helperImport[importKey]
+					if (typeof helper !== "function") {
+						throw new Error(
+							`Helper «${key}» (${importKey}) is not a function.`
+						)
+					}
+					if (importKey === "on") {
+						handlers.push(helper)
+					} else {
+						const helperKey =
+							importKey === "default" ? key : importKey
+						if (helpers[helperKey]) {
+							console.warn(
+								"Duplicate Helper «" + helperKey + "»."
+							)
+						}
+						helpers[helperKey] = helper
+					}
+				}
+			} catch (error) {
+				if (error instanceof Error) {
+					console.error(
+						'Could not load helpers from "' + file + '": ',
+						error.toString()
+					)
+				}
 			}
-		} catch (error) {
-			if (error instanceof Error) {
-				console.error(
-					'Could not load helpers from "' + file + '": ',
-					error.toString()
-				)
-			}
-		}
-	})
+		})
+	)
 	console.log(
 		Colorize.green(String(Object.values(helpers).length).padStart(6)),
 		"helpers"

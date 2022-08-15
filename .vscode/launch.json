@@ -16,10 +16,10 @@
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "Launch Program",
+			"name": "Run combined",
 			"skipFiles": ["<node_internals>/**"],
-			"cwd": "${workspaceFolder}/packages/stageny-base/test/",
-			"program": "${workspaceFolder}/packages/stageny-base/test/build.js"
+			"cwd": "${workspaceFolder}/test/combined/",
+			"program": "./tasks/build.js"
 		}
 	]
 }

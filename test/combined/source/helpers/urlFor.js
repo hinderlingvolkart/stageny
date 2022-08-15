@@ -1,11 +1,11 @@
-const Path = require("path")
+import Path from "path"
 
 const defaultOptions = {
 	stripHtmlExtension: !process.env.KEEP_HTML,
 	relative: true,
 }
 
-module.exports = function (path, userOptions = {}) {
+export default function urlFor(path, userOptions = {}) {
 	if (!path && path !== "") return path
 	const options = { ...defaultOptions, ...userOptions }
 

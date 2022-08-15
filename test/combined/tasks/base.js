@@ -1,15 +1,15 @@
-const { default: Stageny } = require(`@stageny/base`)
-const { default: StagenyData } = require(`@stageny/plugin-data`)
-const { default: StagenyHelpers } = require(`@stageny/plugin-helpers`)
-const { default: StagenyLocalisation } = require(`@stageny/plugin-i18n`)
-const { default: StagenyPagination } = require(`@stageny/plugin-pagination`)
-const rimraf = require("rimraf")
+import { default as Stageny } from "@stageny/base"
+import { default as StagenyData } from "@stageny/plugin-data"
+import { default as StagenyHelpers } from "@stageny/plugin-helpers"
+import { default as StagenyLocalisation } from "@stageny/plugin-i18n"
+import { default as StagenyPagination } from "@stageny/plugin-pagination"
+import rimraf from "rimraf"
 
 console.dir(Stageny)
 
-rimraf.sync(Stageny.config().dist)
+rimraf.sync((await Stageny.config()).dist)
 
-Stageny.config((config) => {
+await Stageny.config((config) => {
 	config.plugins.push(StagenyData({ path: "source/data/*.json" }))
 	config.plugins.push(StagenyHelpers({ path: "source/helpers/*.js" }))
 
@@ -23,4 +23,4 @@ Stageny.config((config) => {
 	)
 })
 
-module.exports = Stageny
+export default Stageny

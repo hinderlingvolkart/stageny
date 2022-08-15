@@ -4,7 +4,7 @@
 		"baseUrl": "src",
 		"rootDir": "src",
 		"module": "esnext",
-		"outDir": "dist/esm",
+		"outDir": "dist",
 		"target": "esnext",
 		"typeRoots": ["./node_modules/@types", "./typings"]
 	},

@@ -2,21 +2,16 @@
 	"name": "@stageny/base",
 	"version": "1.1.0",
 	"description": "Simplistic static site generator",
-	"main": "dist/cjs/index.js",
-	"module": "dist/esm/index.js",
-	"types": "dist/esm/index.d.ts",
-	"exports": {
-		".": {
-			"import": "./dist/esm/index.js",
-			"require": "./dist/cjs/index.js"
-		}
-	},
+	"type": "module",
+	"module": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"exports": "./dist/index.js",
 	"author": "Hinderling Volkart part of Dept",
 	"engines": {
 		"node": ">=12.2.0"
 	},
 	"scripts": {
-		"build": "rm -fr dist/* && tsc -p ./tsconfig.json && tsc -p ./tsconfig-cjs.json && ../../fixup.sh",
+		"build": "rm -fr dist/* && tsc && ../../fixup.sh",
 		"test": "cd test; ts-node build.ts"
 	},
 	"license": "GPL-3.0-only",
@@ -25,19 +20,19 @@
 		"@stageny/engine-pug": "^1.0.9",
 		"@stageny/util": "^1.0.10",
 		"clone-deep": "^4.0.1",
-		"globby": "^11.0.1",
+		"globby": "^13.1.2",
 		"gray-matter": "^4.0.3",
 		"inputformat-to-jstransformer": "^1.4.0",
 		"jstransformer": "^1.0.0",
-		"jstransformer-markdown-it": "^2.1.0",
+		"jstransformer-markdown-it": "^3.0.0",
 		"mkdirp": "^1.0.4",
 		"rimraf": "^3.0.2"
 	},
 	"devDependencies": {
 		"@stageny/types": "^1.0.0",
 		"@types/mkdirp": "^1.0.2",
-		"@types/node": "^17.0.23",
-		"ts-node": "^10.7.0",
-		"typescript": "^4.5.4"
+		"@types/node": "^18.7.4",
+		"ts-node": "^10.9.1",
+		"typescript": "^4.7.4"
 	}
 }

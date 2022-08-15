@@ -1,8 +1,8 @@
 import fs from "fs"
-import path from "path"
-import globby from "globby"
+import Path from "path"
+import { globbySync } from "globby"
 import yaml from "js-yaml"
-
+import { dirname, importUncached } from "@stageny/util"
 import { StagenyData, StagenyConfig, StagenyPlugin } from "@stageny/types"
 
 var datastore: StagenyData = {}
@@ -17,18 +17,20 @@ function verbose(): boolean {
 function reset(): void {
 	datastore = {}
 }
-function readAll(value: string | string[]): void {
+async function readAll(value: string | string[]) {
 	if (verbose()) console.log("Reading data")
-	var files = globby.sync(value)
-	files.forEach(function (file) {
-		readFile(file)
-	})
+	var files = globbySync(value)
+	await Promise.all(
+		files.map((file) => {
+			readFile(file)
+		})
+	)
 }
 
-function readFile(value: string): void {
+async function readFile(value: string) {
 	try {
 		var key = pathToKey(value)
-		datastore[key] = parse(path.extname(value), value)
+		datastore[key] = await parse(Path.extname(value), value)
 		if (verbose()) console.log(`- added data "${key}"`)
 	} catch (error) {
 		console.error(`🛑  Could not read data from "${value}"`)
@@ -38,26 +40,26 @@ function readFile(value: string): void {
 	}
 }
 
-function removeFile(value: string): void {
+function removeFile(value: string) {
 	var name = pathToKey(value)
 	delete datastore[name]
 }
 
 function pathToKey(value: string): string {
-	return path.basename(value).split(".")[0]
+	return Path.basename(value).split(".")[0]
 }
 
-function parse(ext: string, value: string): StagenyData | undefined {
+async function parse(ext: string, value: string) {
 	if (ext == ".yaml" || ext == ".yml") {
 		var content = fs.readFileSync(value)
-		return parseYaml(content.toString())
+		return await parseYaml(content.toString())
 	}
 	if (ext == ".json") {
 		var content = fs.readFileSync(value)
-		return parseJson(content.toString())
+		return await parseJson(content.toString())
 	}
 	if (ext == ".js") {
-		return parseJS(value)
+		return await parseJS(value)
 	}
 }
 function parseYaml(content: string): StagenyData {
@@ -71,17 +73,24 @@ function parseYaml(content: string): StagenyData {
 function parseJson(content: string): StagenyData {
 	return JSON.parse(content)
 }
-function parseJS(value: string): StagenyData {
-	delete require.cache[require.resolve(value)]
-	return require(value)
+async function parseJS(value: string): Promise<StagenyData> {
+	try {
+		var importPath = Path.resolve(process.cwd(), value)
+		const dataImport = importUncached(importPath)
+		if ("default" in dataImport) {
+			return dataImport["default"]
+		}
+	} catch (error) {
+		throw new Error("Could not import javascript data from " + value)
+	}
 }
 
 function plugin(options = { path: "data/*.*" }): StagenyPlugin {
 	return {
 		start() {
-			this.config((config: StagenyConfig) => {
+			this.config(async (config: StagenyConfig) => {
 				stagenyConfig = config
-				readAll(options.path)
+				await readAll(options.path)
 				// we could only update (add/replace/delete)
 				// entries from datastore, instead of replacing
 				// the entire data object

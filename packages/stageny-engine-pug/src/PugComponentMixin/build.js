@@ -1,5 +1,5 @@
-const Pug = require("pug")
-const FS = require("fs")
+import Pug from "pug"
+import FS from "fs"
 
 const compiled = Pug.compileFile("ComponentMixin.pug", {
 	plugins: [

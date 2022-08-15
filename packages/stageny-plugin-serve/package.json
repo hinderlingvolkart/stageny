@@ -2,32 +2,26 @@
 	"name": "@stageny/plugin-serve",
 	"version": "1.0.13",
 	"description": "Serve pages via browser-sync",
-	"main": "dist/cjs/index.js",
-	"module": "dist/esm/index.js",
-	"types": "dist/esm/index.d.ts",
-	"exports": {
-		".": {
-			"import": "./dist/esm/index.js",
-			"require": "./dist/cjs/index.js"
-		}
-	},
+	"module": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"exports": "./dist/index.js",
 	"author": "Hinderling Volkart part of Dept",
 	"engines": {
 		"node": ">=12.0.0"
 	},
 	"scripts": {
-		"build": "rm -fr dist/* && tsc -p ./tsconfig.json && tsc -p ./tsconfig-cjs.json && ../../fixup.sh"
+		"build": "rm -fr dist/* && tsc && ../../fixup.sh"
 	},
 	"license": "GPL-3.0-only",
 	"dependencies": {
-		"browser-sync": "^2.27.7",
-		"url-parse": "^1.5.4"
+		"browser-sync": "^2.27.10",
+		"url-parse": "^1.5.10"
 	},
 	"devDependencies": {
 		"@stageny/types": "^1.0.0",
 		"@types/browser-sync": "^2.26.3",
-		"@types/node": "^17.0.9",
+		"@types/node": "^18.7.4",
 		"@types/url-parse": "^1.4.8",
-		"typescript": "^4.5.4"
+		"typescript": "^4.7.4"
 	}
 }

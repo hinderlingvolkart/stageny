@@ -1,6 +1,6 @@
-const Stageny = require(`./base`)
-const { default: StagenyServe } = require(`@stageny/plugin-serve`)
-const { default: StagenyWatch } = require(`@stageny/plugin-watch`)
+import Stageny from "./base.js"
+import { default as StagenyServe } from "@stageny/plugin-serve"
+import { default as StagenyWatch } from "@stageny/plugin-watch"
 
 Stageny.config((config) => {
 	config.plugins.push(StagenyServe())

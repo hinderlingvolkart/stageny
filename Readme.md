@@ -54,7 +54,7 @@ npm init -y
 npm install @stageny/base
 mkdir source; mkdir source/pages
 echo "p Hello world" > source/pages/index.html.pug
-node -e "require('@stageny/base').run()"
+node -e "import('@stageny/base').then(({ default: Stageny }) => Stageny.run())"
 ```
 
 In most projects you want to work with layouts, components and pages at the very least. Your setup will look like this:

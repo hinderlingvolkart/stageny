@@ -1,3 +1,5 @@
+import engine from "../index.js"
+
 const tests = [
 	{
 		input: "p.Paragraph(data-text=input)= input",
@@ -8,8 +10,6 @@ const tests = [
 		output: "Component a says: Hello world",
 	},
 ]
-
-const engine = require("../index")
 
 tests.forEach((test) => {
 	const renderFn = engine.compile({

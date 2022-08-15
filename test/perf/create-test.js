@@ -1,7 +1,7 @@
-const mkdirp = require("mkdirp")
-const FS = require("fs")
-const Path = require("path")
-const rimraf = require("rimraf")
+import mkdirp from "mkdirp"
+import FS from "fs"
+import Path from "path"
+import rimraf from "rimraf"
 
 rimraf.sync("source")
 
