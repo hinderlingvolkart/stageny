@@ -1,6 +1,6 @@
 {
 	"name": "@stageny/plugin-serve",
-	"version": "1.0.13",
+	"version": "2.0.0-alpha.0",
 	"description": "Serve pages via browser-sync",
 	"module": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -18,7 +18,7 @@
 		"url-parse": "^1.5.10"
 	},
 	"devDependencies": {
-		"@stageny/types": "^1.0.0",
+		"@stageny/types": "^2.0.0-alpha.0",
 		"@types/browser-sync": "^2.26.3",
 		"@types/node": "^18.7.4",
 		"@types/url-parse": "^1.4.8",

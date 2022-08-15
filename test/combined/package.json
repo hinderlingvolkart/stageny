@@ -1,6 +1,6 @@
 {
 	"name": "stageny-test-combined-es6",
-	"version": "1.1.0",
+	"version": "2.0.0-alpha.0",
 	"main": "index.js",
 	"license": "MIT",
 	"private": true,
@@ -11,13 +11,13 @@
 		"watch": "node tasks/watch.js"
 	},
 	"dependencies": {
-		"@stageny/base": "^1.1.0",
-		"@stageny/plugin-data": "^1.0.6",
-		"@stageny/plugin-helpers": "^1.0.9",
-		"@stageny/plugin-i18n": "^1.0.11",
-		"@stageny/plugin-pagination": "^0.0.9",
-		"@stageny/plugin-serve": "^1.0.13",
-		"@stageny/plugin-watch": "^1.0.9",
+		"@stageny/base": "^2.0.0-alpha.0",
+		"@stageny/plugin-data": "^2.0.0-alpha.0",
+		"@stageny/plugin-helpers": "^2.0.0-alpha.0",
+		"@stageny/plugin-i18n": "^2.0.0-alpha.0",
+		"@stageny/plugin-pagination": "^2.0.0-alpha.0",
+		"@stageny/plugin-serve": "^2.0.0-alpha.0",
+		"@stageny/plugin-watch": "^2.0.0-alpha.0",
 		"lerna": "^5.4.2",
 		"rimraf": "^3.0.2"
 	}
