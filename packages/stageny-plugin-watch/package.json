@@ -1,6 +1,6 @@
 {
 	"name": "@stageny/plugin-watch",
-	"version": "2.0.0-alpha.2",
+	"version": "2.0.0-alpha.3",
 	"description": "Watch for changes then reload",
 	"module": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -14,7 +14,7 @@
 	},
 	"license": "GPL-3.0-only",
 	"dependencies": {
-		"@stageny/util": "^2.0.0-alpha.2",
+		"@stageny/util": "^2.0.0-alpha.3",
 		"chokidar": "^3.5.3"
 	},
 	"devDependencies": {

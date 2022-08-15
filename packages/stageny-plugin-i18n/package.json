@@ -1,6 +1,6 @@
 {
 	"name": "@stageny/plugin-i18n",
-	"version": "2.0.0-alpha.2",
+	"version": "2.0.0-alpha.3",
 	"description": "i18n support for stageny",
 	"module": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -15,7 +15,7 @@
 	"license": "GPL-3.0-only",
 	"dependencies": {
 		"@stageny/types": "^2.0.0-alpha.2",
-		"@stageny/util": "^2.0.0-alpha.2",
+		"@stageny/util": "^2.0.0-alpha.3",
 		"clone-deep": "^4.0.1"
 	},
 	"devDependencies": {

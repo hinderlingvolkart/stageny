@@ -1,6 +1,6 @@
 {
 	"name": "@stageny/engine-pug",
-	"version": "2.0.0-alpha.2",
+	"version": "2.0.0-alpha.3",
 	"description": "Pug engine for stageny, with global Component mixin",
 	"module": "dist/index.js",
 	"types": "dist/index.d.ts",
