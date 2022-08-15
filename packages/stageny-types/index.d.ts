@@ -38,10 +38,10 @@ export interface StagenyConfig {
 	layouts: MinimalGlobInputs | MinimalGlobInputs[]
 	componentName: StagenyFileNamer
 	layoutName: StagenyFileNamer
-	data: object
+	data: Record<string, any>
 	formats: string[]
-	engineOptions: object
-	plugins: any[]
+	engineOptions: Record<string, object>
+	plugins: StagenyPlugin[]
 	dist: string
 	verbose: boolean
 	alwaysRebuildSitemap: boolean
@@ -95,7 +95,7 @@ export interface StagenyRenderEngine<T = any> {
 }
 
 export interface RunOptions {
-	filter?: any
+	filter?: typeof Array.prototype.filter<StagenyFile>
 }
 
 export interface MinimalGlobInputs {
