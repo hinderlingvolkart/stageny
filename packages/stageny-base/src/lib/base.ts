@@ -16,14 +16,13 @@ import {
 	StagenyBase,
 	RunOptions,
 	StagenyRenderEngine,
+	StagenyConfigProcessor,
 	StagenyData,
 	MinimalGlobInputs,
 	GlobInputs,
 	StagenyPlugin,
 	StagenyPluginFunction,
 } from "@stageny/types"
-
-type StagenyConfigProcessor = (config: StagenyConfig) => StagenyConfig
 
 const pages: StagenyFile[] = []
 const layouts = new Map()

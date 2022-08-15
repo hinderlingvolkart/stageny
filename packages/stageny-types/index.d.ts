@@ -47,6 +47,10 @@ export interface StagenyConfig {
 	alwaysRebuildSitemap: boolean
 }
 
+type StagenyConfigProcessor = (
+	config: StagenyConfig
+) => OptionalPromise<StagenyConfig>
+
 export type StagenyPluginFunction<T = []> = (
 	this: StagenyBase,
 	...rest: T
