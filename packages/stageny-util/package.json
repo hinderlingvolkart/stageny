@@ -1,6 +1,6 @@
 {
 	"name": "@stageny/util",
-	"version": "2.0.0-alpha.4",
+	"version": "2.0.0-alpha.5",
 	"description": "utilities for stageny",
 	"module": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -14,7 +14,7 @@
 	},
 	"license": "GPL-3.0-only",
 	"dependencies": {
-		"@stageny/types": "^2.0.0-alpha.4",
+		"@stageny/types": "^2.0.0-alpha.5",
 		"ansi-colors": "^4.1.3"
 	},
 	"devDependencies": {
