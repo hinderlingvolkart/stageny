@@ -11,15 +11,15 @@
 		"node": ">=12.0.0"
 	},
 	"license": "GPL-3.0-only",
-	"dependencies": {
-		"pug": "^3.0.0"
-	},
 	"scripts": {
 		"build": "cd src/PugComponentMixin; node build.js; cd ../..; rm -fr dist/* && tsc && ../../fixup.sh",
 		"test": "cd test; node index.js"
 	},
-	"devDependencies": {
+	"dependencies": {
 		"@stageny/types": "^2.0.0-alpha.2",
+		"pug": "^3.0.0"
+	},
+	"devDependencies": {
 		"@types/node": "^18.7.4",
 		"typescript": "^4.7.4"
 	}
