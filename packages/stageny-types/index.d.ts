@@ -98,12 +98,7 @@ export interface RunOptions {
 	filter?: typeof Array.prototype.filter<StagenyFile>
 }
 
-export interface MinimalGlobInputs {
-	glob?: string[] | string
-	base?: string
-	dest?: string
-}
-
+type MinimalGlobInputs = Partial<GlobInputs>
 export interface GlobInputs {
 	glob: string[] | string
 	base: string
