@@ -12,13 +12,11 @@ import JavascriptEngine from "@stageny/engine-js"
 import { renderAsHtml as renderError } from "./renderError.js"
 import {
 	StagenyFile,
-	StagenyConfig,
 	StagenyBase,
 	RunOptions,
 	StagenyRenderEngine,
 	StagenyConfigProcessor,
 	StagenyData,
-	MinimalGlobInputs,
 	GlobInputs,
 	StagenyPlugin,
 	StagenyPluginFunction,
@@ -338,14 +336,27 @@ function assignIfNot(target: Record<string, any>, source: Record<string, any>) {
 }
 
 function processFile(file: StagenyFile, data = {}): string {
-	compileTemplate(file)
+	try {
+		compileTemplate(file)
+	} catch (error) {
+		throw new Error(
+			`Error compiling file ${file.sourcePath}:\n${error.message}`
+		)
+	}
 	if (!file.render)
 		throw new Error("No render function found for " + file.sourcePath)
 	if (typeof file.render !== "function")
 		throw new Error(
 			"Render function is not a function for " + file.sourcePath
 		)
-	let result = file.render(data)
+	let result
+	try {
+		result = file.render(data)
+	} catch (error) {
+		throw new Error(
+			`Error rendering file ${file.sourcePath}:\n${error.message}`
+		)
+	}
 
 	compileData(file)
 
@@ -495,7 +506,17 @@ async function readFile(
 		})
 	} else {
 		const rawContent = (await FS.readFile(file.sourcePath)).toString()
-		const matter = Frontmatter.extract(rawContent)
+		let matter = { data: {}, content: rawContent }
+		try {
+			matter = Frontmatter.extract(rawContent)
+		} catch (e) {
+			throw new Error(
+				"Error extracting frontmatter from " +
+					file.sourcePath +
+					": " +
+					e.message
+			)
+		}
 		Object.assign(file, {
 			raw: rawContent,
 			content: matter.content,

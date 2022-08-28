@@ -49,7 +49,7 @@ export interface StagenyConfig {
 
 type StagenyConfigProcessor = (
 	config: StagenyConfig
-) => OptionalPromise<StagenyConfig>
+) => OptionalPromise<StagenyConfig | void>
 
 export type StagenyPluginFunction<T = []> = (
 	this: StagenyBase,
@@ -94,8 +94,9 @@ export interface StagenyRenderEngine<T = any> {
 	outputFormat?: string
 }
 
+type FilterFunction<T = any> = (page: T, index: Number, source: T[]) => boolean
 export interface RunOptions {
-	filter?: typeof Array.prototype.filter<StagenyFile>
+	filter?: FilterFunction<StagenyFile>
 }
 
 type MinimalGlobInputs = Partial<GlobInputs>

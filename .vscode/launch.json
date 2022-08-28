@@ -16,10 +16,18 @@
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "Run combined",
+			"name": "Build combined",
 			"skipFiles": ["<node_internals>/**"],
 			"cwd": "${workspaceFolder}/test/combined/",
 			"program": "./tasks/build.js"
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Serve combined",
+			"skipFiles": ["<node_internals>/**"],
+			"cwd": "${workspaceFolder}/test/combined/",
+			"program": "./tasks/serve.js"
 		}
 	]
 }

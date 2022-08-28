@@ -1,0 +1,33 @@
+export default `mixin Component(key, options = { })
+	if block
+		- const beforeHtml = pug_html; // save the current HTML state in a variable
+		block
+		-
+			options.content = pug_html.substr(beforeHtml.length)
+			pug_html = beforeHtml
+	if attributes
+		-
+			options = Object.assign({ attributes }, attributes, options)
+	if component
+		!= component(key, options)
+	else
+		- throw new Error('component function is missing')
+
+
+mixin Capture(key, done = null)
+	if block
+		- const beforeHtml = pug_html; // save the current HTML state in a variable
+		block
+		-
+			content = pug_html.substr(beforeHtml.length)
+			pug_html = beforeHtml
+			if (typeof done === 'function') {
+				done(content)
+			} else
+			if (typeof capture === 'function') {
+				capture(key, content)
+			} else {
+				throw new Error('capture function is missing')
+			}
+
+`

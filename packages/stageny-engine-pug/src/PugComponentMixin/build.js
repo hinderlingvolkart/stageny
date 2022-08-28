@@ -11,12 +11,15 @@ const compiled = Pug.compileFile("ComponentMixin.pug", {
 					`export default ${result}`
 				)
 
-				return {
-					type: "Block",
-					nodes: [],
-				}
+				return ast
 			},
 		},
 	],
 	filename: "ComponentMixin.pug",
+	compileDebug: true,
 })
+
+FS.writeFileSync(
+	"ComponentMixinSource.js",
+	`export default \`${FS.readFileSync("ComponentMixin.pug")}\``
+)
