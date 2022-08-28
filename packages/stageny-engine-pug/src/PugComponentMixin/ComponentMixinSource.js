@@ -19,7 +19,7 @@ mixin Capture(key, done = null)
 		- const beforeHtml = pug_html; // save the current HTML state in a variable
 		block
 		-
-			content = pug_html.substr(beforeHtml.length)
+			let content = pug_html.substr(beforeHtml.length)
 			pug_html = beforeHtml
 			if (typeof done === 'function') {
 				done(content)

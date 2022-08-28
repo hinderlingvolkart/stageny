@@ -153,7 +153,7 @@ export default [
               },
               {
                 "type": "Code",
-                "val": "content = pug_html.substr(beforeHtml.length)\npug_html = beforeHtml\nif (typeof done === 'function') {\n\tdone(content)\n} else\nif (typeof capture === 'function') {\n\tcapture(key, content)\n} else {\n\tthrow new Error('capture function is missing')\n}",
+                "val": "let content = pug_html.substr(beforeHtml.length)\npug_html = beforeHtml\nif (typeof done === 'function') {\n\tdone(content)\n} else\nif (typeof capture === 'function') {\n\tcapture(key, content)\n} else {\n\tthrow new Error('capture function is missing')\n}",
                 "buffer": false,
                 "mustEscape": false,
                 "isInline": false,
