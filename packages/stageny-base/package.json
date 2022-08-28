@@ -1,6 +1,6 @@
 {
 	"name": "@stageny/base",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"description": "Simplistic static site generator",
 	"type": "module",
 	"module": "dist/index.js",
@@ -17,7 +17,7 @@
 	"license": "GPL-3.0-only",
 	"dependencies": {
 		"@stageny/engine-js": "^2.0.0",
-		"@stageny/engine-pug": "^2.0.0",
+		"@stageny/engine-pug": "^2.0.1",
 		"@stageny/types": "^2.0.0",
 		"@stageny/util": "^2.0.0",
 		"clone-deep": "^4.0.1",
