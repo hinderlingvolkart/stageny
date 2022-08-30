@@ -1,6 +1,6 @@
 {
 	"name": "@stageny/plugin-pagination",
-	"version": "2.0.0",
+	"version": "2.0.5",
 	"description": "pagination for stageny",
 	"module": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -14,8 +14,8 @@
 	},
 	"license": "GPL-3.0-only",
 	"dependencies": {
-		"@stageny/types": "^2.0.0",
-		"@stageny/util": "^2.0.0"
+		"@stageny/types": "^2.0.5",
+		"@stageny/util": "^2.0.5"
 	},
 	"devDependencies": {
 		"@types/node": "^18.7.4",
