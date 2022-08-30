@@ -3,9 +3,9 @@ import Path from "path"
 import { globbySync } from "globby"
 import yaml from "js-yaml"
 import { importUncached } from "@stageny/util"
-import { StagenyData, StagenyConfig, StagenyPlugin } from "@stageny/types"
+import { StagenyConfig, StagenyPlugin, DataMap } from "@stageny/types"
 
-var datastore: StagenyData = {}
+var datastore: DataMap = {}
 let stagenyConfig: StagenyConfig
 
 // reads and keeps data from a directory
@@ -62,7 +62,7 @@ async function parse(ext: string, value: string) {
 		return await parseJS(value)
 	}
 }
-function parseYaml(content: string): StagenyData {
+function parseYaml(content: string): DataMap {
 	const result = yaml.load(content)
 	if (result instanceof Object) {
 		return result
@@ -70,10 +70,10 @@ function parseYaml(content: string): StagenyData {
 		return {}
 	}
 }
-function parseJson(content: string): StagenyData {
+function parseJson(content: string): DataMap {
 	return JSON.parse(content)
 }
-async function parseJS(value: string): Promise<StagenyData> {
+async function parseJS(value: string): Promise<DataMap> {
 	try {
 		var importPath = Path.resolve(process.cwd(), value)
 		const dataImport = importUncached(importPath)

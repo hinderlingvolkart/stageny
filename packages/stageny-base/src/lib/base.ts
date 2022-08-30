@@ -203,38 +203,33 @@ async function processPage(file: StagenyFile) {
 
 	await applyPlugins("beforepageprocess", file)
 
-	const mergedData: StagenyData = {}
-	Object.assign(
-		mergedData,
-		config.data,
-		{
-			_stageny: Stageny,
-			_page: file,
-			_pages: pages,
-			_captured: {},
-			_data: config.data,
-			_locals: mergedData,
+	const initialData: Omit<StagenyData, "_locals"> = {
+		...config.data,
+		_stageny: Stageny,
+		_page: file,
+		_pages: pages,
+		_captured: {},
+		_data: config.data,
+		component: function (name: string, options: Record<string, any> = {}) {
+			const html = processComponent(name, options, mergedData)
+			return html
 		},
-		{
-			component: function (name: string, options: any) {
-				const html = processComponent(name, options, mergedData)
-				return html
-			},
-			capture: function (key: string, content: string) {
-				mergedData._captured[key] = content
-			},
-			captured(key: string) {
-				return mergedData._captured[key] || ""
-			},
-		}
-	)
+		capture: function (key: string, content: string) {
+			mergedData._captured[key] = content
+		},
+		captured(key: string) {
+			return mergedData._captured[key] || ""
+		},
+	}
+	const mergedData: StagenyData = Object.assign(initialData as StagenyData, {
+		_locals: initialData as StagenyData,
+	})
 
 	let result
 	try {
 		compileTemplate(file)
 
 		await applyPlugins("beforepagedata", file, mergedData)
-		Object.assign(mergedData, config.data, { _data: config.data })
 		if (file.meta && file.meta.data)
 			Object.assign(mergedData, file.meta.data)
 		file.meta = Frontmatter.process(file.meta, mergedData)
@@ -277,7 +272,11 @@ async function processPage(file: StagenyFile) {
 	delete file.result
 }
 
-function processComponent(name: string, localData: any, globalData: any) {
+function processComponent(
+	name: string,
+	localData: Record<string, any>,
+	globalData: StagenyData
+) {
 	const file = components.get(name)
 	if (!file) {
 		throw new Error("Could not find component " + name)
@@ -285,21 +284,18 @@ function processComponent(name: string, localData: any, globalData: any) {
 	const perfItem = perf.start(`Component ${name}`)
 	compileData(file)
 
-	const data = {}
-	Object.assign(
-		data,
-		globalData,
-		{
-			_locals: data,
-			get _args() {
-				if (config.verbose) console.log("Usage of _args is deprecated")
-				return localData
-			}, // deprecated
-			_props: localData,
-		},
-		file.meta,
-		localData
-	)
+	const data = {
+		...globalData,
+		get _args() {
+			if (config.verbose) console.log("Usage of _args is deprecated")
+			return localData
+		}, // deprecated
+		_props: localData,
+		...file.meta,
+		...localData,
+	}
+
+	data._locals = data
 
 	const meta = Frontmatter.process(file.meta, data)
 
@@ -308,7 +304,7 @@ function processComponent(name: string, localData: any, globalData: any) {
 	return result
 }
 
-function processLayout(name: string, data: any) {
+function processLayout(name: string, data: StagenyData) {
 	const file = layouts.get(name)
 	if (!file) {
 		throw new Error("Could not find layout " + name)
@@ -339,7 +335,7 @@ function assignIfNot(target: Record<string, any>, source: Record<string, any>) {
 	}
 }
 
-function processFile(file: StagenyFile, data = {}): string {
+function processFile(file: StagenyFile, data: StagenyData): string {
 	try {
 		compileTemplate(file)
 	} catch (error) {

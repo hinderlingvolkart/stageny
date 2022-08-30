@@ -28,7 +28,19 @@ export interface StagenyFile<T = any> {
 	render?: (data: StagenyData) => string
 }
 
-export type StagenyData = { [key: string]: any }
+export type StagenyData = DataMap & {
+	_stageny: StagenyBase
+	_page: StagenyFile
+	_pages: StagenyFile[]
+	_captured: Record<string, string>
+	_data: DataMap
+	_locals: StagenyData
+	component: (name: string, options: DataMap) => string
+	capture: (key: string, content: string) => void
+	captured: (key: string) => string | undefined
+}
+
+export type DataMap = Record<string, any>
 
 export type StagenyFileNamer = (file: StagenyFile) => string
 
@@ -58,7 +70,7 @@ export type StagenyPluginFunction<T = []> = (
 export type StagenyPluginFunctionFile = StagenyPluginFunction<[StagenyFile]>
 export type StagenyPluginFunctionFiles = StagenyPluginFunction<[StagenyFile[]]>
 export type StagenyPluginFunctionFileData = StagenyPluginFunction<
-	[StagenyFile, any]
+	[StagenyFile, StagenyData]
 >
 export interface StagenyPlugin {
 	init?: StagenyPluginFunction
@@ -76,9 +88,28 @@ export interface StagenyPlugin {
 	all?: (this: StagenyBase, ...rest: any) => void
 }
 
-export interface StagenyHelper extends Function {
-	on?: (event: string, callback: Function) => void
+export type StagenyHelper = Function & Partial<StagenyPluginListener>
+
+export interface StagenyPluginListener {
+	on: StagenyPluginListenerFunction<"init">
+	on: StagenyPluginListenerFunction<"start">
+	on: StagenyPluginListenerFunction<"end">
+	on: StagenyPluginListenerFunction<"sitemap">
+	on: StagenyPluginListenerFunction<"beforepageprocess">
+	on: StagenyPluginListenerFunction<"beforepagedata">
+	on: StagenyPluginListenerFunction<"afterpagedata">
+	on: StagenyPluginListenerFunction<"beforepagerender">
+	on: StagenyPluginListenerFunction<"afterpagerender">
+	on: StagenyPluginListenerFunction<"pageerror">
+	on: StagenyPluginListenerFunction<"beforepagewrite">
+	on: StagenyPluginListenerFunction<"afterpagewrite">
+	on: StagenyPluginListenerFunction<"all">
 }
+
+export type StagenyPluginListener<T> = (
+	event: T,
+	callback: StagenyPlugin[T]
+) => void
 
 export interface StagenyRenderEngine<T = any> {
 	read?: (source: string) => OptionalPromise<{

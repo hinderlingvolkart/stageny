@@ -1,13 +1,12 @@
 import Path from "path"
 
-import {
+import type {
 	MinimalGlobInputs,
 	StagenyFile,
 	StagenyConfig as StagenyConfigType,
 	StagenyFileNamer,
-	StagenyData,
-	StagenyRenderEngine,
 	StagenyPlugin,
+	DataMap,
 } from "@stageny/types"
 
 export default class StagenyConfig implements StagenyConfigType {
@@ -16,7 +15,7 @@ export default class StagenyConfig implements StagenyConfigType {
 	layouts!: MinimalGlobInputs | MinimalGlobInputs[]
 	componentName!: StagenyFileNamer
 	layoutName!: StagenyFileNamer
-	data!: StagenyData
+	data!: DataMap
 	formats!: string[]
 	engineOptions!: any
 	plugins!: StagenyPlugin[]
