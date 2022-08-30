@@ -291,7 +291,11 @@ function processComponent(name: string, localData: any, globalData: any) {
 		globalData,
 		{
 			_locals: data,
-			_args: localData,
+			get _args() {
+				if (config.verbose) console.log("Usage of _args is deprecated")
+				return localData
+			}, // deprecated
+			_props: localData,
 		},
 		file.meta,
 		localData
