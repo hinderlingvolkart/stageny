@@ -5,6 +5,14 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
+			"runtimeExecutable": "yarn",
+			"runtimeArgs": ["build"],
+			"name": "Build combined (and compare)",
+			"request": "launch",
+			"type": "node",
+			"cwd": "${workspaceFolder}/test/combined/"
+		},
+		{
 			"type": "pwa-node",
 			"name": "Run test build",
 			"runtimeExecutable": "node",

@@ -1,6 +1,10 @@
 doctype html
-html(lang=(locale || "de"))
+html(lang=(locale || "de"))
 	head
 		title= title || "Page"
 	body
 		!= content
+
+		ul
+			each country in _data.countries
+				li: a(href=`/${country.language}`)!= country.name
