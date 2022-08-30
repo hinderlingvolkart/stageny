@@ -513,7 +513,7 @@ async function readFile(
 			throw new Error(
 				"Error extracting frontmatter from " +
 					file.sourcePath +
-					": " +
+					":\n" +
 					e.message
 			)
 		}
