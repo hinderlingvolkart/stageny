@@ -1,6 +1,6 @@
 {
 	"name": "@stageny/plugin-data",
-	"version": "2.0.0",
+	"version": "2.0.2",
 	"description": "Data for stageny",
 	"module": "dist/index.js",
 	"types": "dist/index.d.ts",
