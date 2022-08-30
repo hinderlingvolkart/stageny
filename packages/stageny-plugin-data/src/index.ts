@@ -106,10 +106,6 @@ function plugin(
 			await readAll(options.path)
 			this.config(async (config: StagenyConfig) => {
 				stagenyConfig = config
-				// we could only update (add/replace/delete)
-				// entries from datastore, instead of replacing
-				// the entire data object
-				config.data = datastore
 			})
 		},
 	}
