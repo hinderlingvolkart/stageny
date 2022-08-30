@@ -2,7 +2,7 @@ import fs from "fs"
 import Path from "path"
 import { globbySync } from "globby"
 import yaml from "js-yaml"
-import { dirname, importUncached } from "@stageny/util"
+import { importUncached } from "@stageny/util"
 import { StagenyData, StagenyConfig, StagenyPlugin } from "@stageny/types"
 
 var datastore: StagenyData = {}
@@ -85,12 +85,27 @@ async function parseJS(value: string): Promise<StagenyData> {
 	}
 }
 
-function plugin(options = { path: "data/*.*" }): StagenyPlugin {
+function plugin(
+	options = { path: "data/*.*", globalContext: false }
+): StagenyPlugin {
 	return {
-		start() {
+		beforepagedata(file, data) {
+			if (options.globalContext) {
+				for (let key in datastore) {
+					if (Object.hasOwnProperty.call(datastore, key)) {
+						console.warn(
+							`🛑  Data "${key}" is already defined, overwritten by stageny data plugin.`
+						)
+					}
+				}
+				Object.assign(data, datastore)
+			}
+			data._data = datastore
+		},
+		async start() {
+			await readAll(options.path)
 			this.config(async (config: StagenyConfig) => {
 				stagenyConfig = config
-				await readAll(options.path)
 				// we could only update (add/replace/delete)
 				// entries from datastore, instead of replacing
 				// the entire data object
