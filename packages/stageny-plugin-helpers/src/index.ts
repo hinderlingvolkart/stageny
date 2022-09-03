@@ -2,7 +2,7 @@ import { StagenyHelper, StagenyPlugin } from "@stageny/types"
 
 import { globbySync } from "globby"
 import Path from "path"
-import { Colorize, dirname, importUncached } from "@stageny/util"
+import { Colorize, importUncached } from "@stageny/util"
 var helpers: Record<string, any> = {}
 var handlers: Function[]
 var savedOptions: {
@@ -35,6 +35,9 @@ async function update() {
 							console.warn(
 								"Duplicate Helper «" + helperKey + "»."
 							)
+						}
+						if (typeof helper.on === "function") {
+							handlers.push(helper.on)
 						}
 						helpers[helperKey] = helper
 					}
@@ -69,11 +72,9 @@ function plugin(options = { path: "helpers/*.js" }): StagenyPlugin {
 			Object.assign(data, boundHelpers, { _helpers: boundHelpers })
 		},
 		all(...args) {
-			Object.keys(helpers).forEach((key) => {
-				const helper = helpers[key]
-				if (helper.on) {
-					helper.on.apply(this, args)
-				}
+			Object.keys(handlers).forEach((key) => {
+				const handler = handlers[key]
+				handler.apply(this, args)
 			})
 		},
 	}
