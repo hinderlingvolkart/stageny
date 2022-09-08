@@ -1,6 +1,6 @@
 {
 	"name": "@stageny/plugin-helpers",
-	"version": "2.0.8",
+	"version": "2.0.9",
 	"description": "Helper functions for stageny",
 	"module": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -14,8 +14,8 @@
 	},
 	"license": "GPL-3.0-only",
 	"dependencies": {
-		"@stageny/types": "^2.0.5",
-		"@stageny/util": "^2.0.5",
+		"@stageny/types": "^2.0.9",
+		"@stageny/util": "^2.0.9",
 		"globby": "^13.1.2"
 	},
 	"devDependencies": {

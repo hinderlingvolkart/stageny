@@ -1,6 +1,6 @@
 {
 	"name": "@stageny/engine-js",
-	"version": "2.0.5",
+	"version": "2.0.9",
 	"description": "Javascript Engine for stageny",
 	"module": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -14,7 +14,7 @@
 	},
 	"license": "GPL-3.0-only",
 	"dependencies": {
-		"@stageny/types": "^2.0.5"
+		"@stageny/types": "^2.0.9"
 	},
 	"devDependencies": {
 		"@types/node": "^18.7.4",
