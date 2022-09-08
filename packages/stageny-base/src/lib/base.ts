@@ -265,9 +265,11 @@ async function processPage(file: StagenyFile) {
 	await applyPlugins("beforepagewrite", file)
 	result = file.result
 
-	mkdirp.sync(Path.dirname(file.destination))
-	await FS.writeFile(file.destination, result || "")
-	savedPages[file.url] = file.destination
+	if (config.writeToDisk) {
+		mkdirp.sync(Path.dirname(file.destination))
+		await FS.writeFile(file.destination, result || "")
+		savedPages[file.url] = file.destination
+	}
 	await applyPlugins("afterpagewrite", file)
 	delete file.result
 }

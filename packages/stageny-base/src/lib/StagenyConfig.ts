@@ -22,6 +22,7 @@ export default class StagenyConfig implements StagenyConfigType {
 	dist!: string
 	verbose!: boolean
 	alwaysRebuildSitemap!: boolean
+	writeToDisk!: boolean
 
 	constructor() {
 		this.reset()
@@ -40,6 +41,7 @@ export default class StagenyConfig implements StagenyConfigType {
 		this.dist = "dist"
 		this.verbose = false
 		this.alwaysRebuildSitemap = true
+		this.writeToDisk = true
 	}
 }
 

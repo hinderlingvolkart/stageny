@@ -57,6 +57,7 @@ export interface StagenyConfig {
 	dist: string
 	verbose: boolean
 	alwaysRebuildSitemap: boolean
+	writeToDisk: boolean
 }
 
 type StagenyConfigProcessor = (
