@@ -73,6 +73,8 @@ function start(Stageny: StagenyBase, options: Options = {}) {
 				}).then(() => {
 					try {
 						const page = Stageny.sitemap.find(pageFilter)
+						// avoid sending 304
+						res.setHeader("Last-Modified", new Date().toUTCString())
 						send(req, page.destination).pipe(res)
 						bs.resume()
 					} catch (e) {
